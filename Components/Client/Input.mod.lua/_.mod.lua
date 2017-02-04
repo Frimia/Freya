@@ -305,6 +305,15 @@ local InputSources, LinkedTypes, LinkedNames do
       Touch["Touch"..k] = v;
     end;
   end
+  do  -- Mouse aliases
+    local Mouse = InputSources.Mouse;
+    Mouse.LeftMouse = Mouse.Mouse1;
+    Mouse.RightMouse = Mouse.Mouse2;
+    Mouse.MiddleMouse = Mouse.Mouse3;
+    Mouse.Left = Mouse.Mouse1;
+    Mouse.Right = Mouse.Mouse2;
+    Mouse.Middle = Mouse.Mouse3;
+  end
   for k,v in next, InputSources do
     local np = newproxy(true);
     local mt = getmetatable(np);
