@@ -42,6 +42,7 @@ local ActionMt = {
   end;
 };
 local UserActions = setmetatable({},{__mode = 'v'});
+local NoGPE = setmetatable({},{__mode = 'v'});
 
 local iBinds = {};
 local InputSources, LinkedTypes, LinkedNames do
@@ -701,6 +702,9 @@ function ActionClass:SetFlag(flag, value)
     value = (not not value) or nil;
     IntentService:Fire("SetUserAction", self, value or false);
     UserActions[self] = value;
+  elseif flag == 'NoGPE' then
+    value = (not not value) or nil;
+    NoGPE[self] = value;
   else
     return error(
       "[Error][Valkyrie Input] (in Action:SetFlag()): "..flag.." is not a valid flag.",
@@ -779,6 +783,7 @@ do
     if dir == InputDirections.DownUp then
       local down = false;
       bfunc = function(i,d,p,r)
+        if p and NoGPE[self] then return end;
         if d == InputDirections.Up then
           if down then
             down = false;
@@ -791,6 +796,7 @@ do
       end;
     else
       bfunc = function(i,d,p,r)
+        if p and NoGPE[self] then return end;
         if d == dir then
           return func(i,p,r);
         end;
@@ -835,6 +841,7 @@ do
     if dir == InputDirections.DownUp then
       local down = false;
       bfunc = function(i,d,p,r)
+        if p and NoGPE[self] then return end;
         if d == InputDirections.Up then
           if down then
             down = false;
@@ -847,6 +854,7 @@ do
       end;
     else
       bfunc = function(i,d,p,r)
+        if p and NoGPE[self] then return end;
         if d == dir then
           return func(i,p,r);
         end;
@@ -893,6 +901,7 @@ do
       if d == InputDirections.DownUp then
         local down = false;
         bfunc = function(i,d,p,r)
+          if p and NoGPE[self] then return end;
           if d == InputDirections.Up then
             if down then
               down = false;
@@ -905,6 +914,7 @@ do
         end;
       else
         bfunc = function(i,dir,p,r)
+          if p and NoGPE[self] then return end;
           if d == dir then
             return func(i,p,r);
           end;
@@ -933,7 +943,10 @@ do
     -- ~ Redirects a button press (From any input that can provide it) to the action
 
     local TouchState = CreateInputState(InputSources.Touch.TouchTap, button);
-    local tBind = iBinds[TouchState]:connect(function(i,d,p,r) self.Action(i,p,r) end);
+    local tBind = iBinds[TouchState]:connect(function(i,d,p,r)
+      if p and NoGPE[self] then return end;
+      self.Action(i,p,r);
+    end);
     local mBind = button.MouseButton1Click:connect(self.Action);
     -- Not sure how the Controller is supposed to select things?
 
@@ -969,6 +982,7 @@ do
       ilist[i] = iobj;
       Totals[i] = false;
       local Bind = iBinds[iobj]:connect(function(q,d,p,r)
+        if p and NoGPE[self] then return end;
         if d == InputDirections.Up then
           Totals[i] = false;
         elseif d == InputDirections.Down then
@@ -1020,6 +1034,7 @@ do
         end;
       end;
       BindCollection[#BindCollection+1] = iBinds[state]:connect(function(q,d,p,r)
+        if p and NoGPE[self] then return end;
         if curr ~= i then curr = 1 return end;
         if d == InputDirections.Up then
           if down then
@@ -1053,6 +1068,7 @@ do
 
     --> Connection
     local bind = iBinds[state]:connect(function(i,d,p,r)
+      if p and NoGPE[self] then return end;
       return self.Action(i,p,r);
     end)
     ActionBinds[self][#ActionBinds[self]+1] = bind;
@@ -1082,6 +1098,7 @@ do
 
     local afunc = self.Action;
     local bfunc = function(i,d,p,r)
+      if p and NoGPE[self] then return end;
       if d == InputDirections.Down then
         local alive = true;
         delay(time, function()
