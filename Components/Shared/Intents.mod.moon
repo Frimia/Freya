@@ -83,6 +83,7 @@ cxitio.Listen = (...) ->
     tmp = {...}
     promise\Fire!
   promise.Event\wait!
+  e\disconnect!
   unpack tmp
 cxitio.Wait = cxitio.Listen
 cxitio.wait = cxitio.Listen
