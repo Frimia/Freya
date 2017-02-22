@@ -48,11 +48,11 @@ ghroot = "https://api.github.com/"
 ghraw = "https://raw.githubusercontent.com/"
 
 extignore = {
-  "md"
-  "properties"
-  "gitnore"
-  "gitkeep"
-  "gitignore"
+  md: true
+  properties: true
+  gitnore: true
+  gitkeep: true
+  gitignore: true
 }
 
 GetPackage = (path, Version) ->
