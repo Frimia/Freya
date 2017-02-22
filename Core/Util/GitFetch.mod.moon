@@ -142,6 +142,7 @@ GetPackage = (path, Version) ->
               unless n == '_'
                 inst = origin[n]
             inst.Source = GET "#{ghraw}#{repo}/#{sha}/#{v.path}"
+            inst = nil -- There is no need to parent the Instance later
           else
             print "[Info][Freya GitFetch] Building #{v.path}."
             inst = switch ext
