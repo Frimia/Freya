@@ -79,7 +79,7 @@ GetPackage = (path, Version) ->
         _, j = GET "#{ghroot}repos/#{repo}/commits", headers
       return nil, "Failed to get commit details: #{j.message}" if j.message
       sha = j[1].sha
-      _, j = GET "#{ghroot}repos/#{repo}/git/trees/#{sha}", headers
+      _, j = GET "#{ghroot}repos/#{repo}/git/trees/#{sha}?recursive=1", headers
       return nil, "Failed to get repo tree: #{j.message}" if j.message
       _, def = GET "#{ghraw}#{repo}/#{sha}/FreyaPackage.properties"
       return nil, "Bad package definition at FreyaPackage.properties" unless def
