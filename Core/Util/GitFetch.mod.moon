@@ -81,6 +81,7 @@ GetPackage = (path, Version) ->
       sha = j[1].sha
       _, j = GET "#{ghroot}repos/#{repo}/git/trees/#{sha}?recursive=1", headers
       return nil, "Failed to get repo tree: #{j.message}" if j.message
+      return nil, "Truncated repository :c" if j.truncated
       _, def = GET "#{ghraw}#{repo}/#{sha}/FreyaPackage.properties"
       return nil, "Bad package definition at FreyaPackage.properties" unless def
       return nil, "Malformed package definition at FreyaPackage.properties" unless def.Type and def.Package
