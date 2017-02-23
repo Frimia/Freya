@@ -306,7 +306,7 @@ GetPackage = (path, Version) ->
 ReadRepo = (repo) ->
   -- Repo as repo. Yes.
   paklist = {}
-  ptype = select 2, path\gsub('/', '')
+  ptype = select 2, repo\gsub('/', '')
   headers = {
     Accept: "application/vnd.github.v3+json"
     --["User-Agent"]: "CrescentCode/Freya (User #{game.CreatorId})"
