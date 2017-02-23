@@ -36,6 +36,8 @@ if Freya
     Freya.PackageList.Parent = script.Core
     Packages = require script.Core.PackageList
     Vulcan = require script.Core.Util.Vulcan
+    RepoList = script.Core.Util.RepoManager.RepoList
+    RepoList.Parent = nil
     Locate = Vulcan.Locate
     --// Preserve Packages
     for Package in *Packages
@@ -45,6 +47,9 @@ if Freya
     require(script.unpack) script
     --// Recognise the new Freya
     Freya = game.ServerStorage.Freya
+    --// Restore repositories
+    Freya.Util.RepoManager.RepoList\Destroy!
+    RepoList.Parent = Freya.Util.RepoManager
     --// Restore packages
     for Package in *Packages
       print "[Freya] Restoring #{Package.Origin.Name}"
