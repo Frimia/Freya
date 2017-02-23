@@ -32,6 +32,9 @@ GET =  (url, headers) ->
       wait(5)
   return error r unless s
   return r, (select 2, pcall Http.JSONDecode, Http, r)
+TEST =  (url, headers) ->
+  s, r = pcall Http.GetAsync, Http, url, true, headers
+  return s
 POST =  (url, body, headers) ->
   local s
   local r
@@ -317,11 +320,13 @@ ReadRepo = (repo) ->
       _, rlist = GET "#{ghroot}users/#{repo}/repos", headers
       for r in *rlist
         -- See if it's a Freya package
+        continue unless TEST "#{ghraw}#{r.full_name}/master/FreyaPackage.properties"
         _, data = GET "#{ghraw}#{r.full_name}/master/FreyaPackage.properties", headers
         continue unless data and (data.Name or data.Package)
         paklist[r.name] = "github:#{r.full_name}"
     when 1
       -- Repo as repo
+      return {} unless TEST "#{ghraw}#{repo}/master/FreyaRepo.properties"
       _, data = GET "#{ghraw}#{repo}/master/FreyaRepo.properties", headers
       return {} unless data
       _, tree = GET "#{ghroot}repos/#{repo}/git/trees/master", headers
@@ -330,6 +335,7 @@ ReadRepo = (repo) ->
         return {}
       for t in *tree
         continue unless t.type == 'tree'
+        continue unless TEST "#{ghraw}#{repo}/master/#{t.path}/FreyaPackage.properties"
         _, pdat = GET "#{ghraw}#{repo}/master/#{t.path}/FreyaPackage.properties"
         continue unless pdat and (pdat.Name or pdat.Package)
         nom = data[t.path] or t.path
