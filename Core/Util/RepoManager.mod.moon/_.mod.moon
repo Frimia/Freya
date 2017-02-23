@@ -53,13 +53,14 @@ DelRepo = (repo) ->
   warn "[Warn][Freya RepoManager] #{repo} appears to not be present in the repo list."
   Flush!
 Update = -> Togglet ->
+  RepoList.Packages = {}
   for v in *(RepoList.Repositories)
     switch type v
       when 'number'
         def = require v
         nme = def.Name or def.Package.Name
         if RepoList.Packages[nme]
-          if type RepoList.Packages[nme] == 'table'
+          if type(RepoList.Packages[nme]) == 'table'
             table.insert RepoList.Packages[nme], v
           else
             RepoList.Packages[nme] = {RepoList.Packages[nme], v}
@@ -70,7 +71,7 @@ Update = -> Togglet ->
           when 'github'
             for k,v in pairs GitFetch.ReadRepo v\match("^github:(.+)$")
               if RepoList.Packages[k]
-                if type RepoList.Packages[k] == 'table'
+                if type(RepoList.Packages[k]) == 'table'
                   table.insert RepoList.Packages[k], v
                 else
                   RepoList.Packages[k] = {RepoList.Packages[k], v}
