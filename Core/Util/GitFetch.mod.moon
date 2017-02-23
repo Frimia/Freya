@@ -342,6 +342,7 @@ Interface = {
   :POST
   :GET
   :GetPackage
+  :ReadRepo
 }
 
 ni = newproxy true
