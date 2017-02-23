@@ -61,6 +61,9 @@ GetPackage = (path, Version) ->
     Accept: "application/vnd.github.v3+json"
     --["User-Agent"]: "CrescentCode/Freya (User #{game.CreatorId})"
   }
+  lGET = GET
+  local GET
+  GET = (u) -> lGET u, headers
   switch ptype
     when 1
       -- Test repo for existance
@@ -266,7 +269,7 @@ GetPackage = (path, Version) ->
               n = t\match '^([^%.]+).+$'
               unless n == '_'
                 inst = origin[n]
-            inst.Source = GET "#{ghraw}#{repo}/#{sha}/#{supak}/#{v.path}"
+            inst.Source = GET "#{ghraw}#{repo}/#{sha}/#{supak}/#{v.path}", headers
             inst = nil -- There is no need to parent the Instance later
           else
             print "[Info][Freya GitFetch] Building #{v.path}."
@@ -300,6 +303,38 @@ GetPackage = (path, Version) ->
       otab.Package = origin\FindFirstChild def.Package
       return otab
 
+ReadRepo = (repo) ->
+  -- Repo as repo. Yes.
+  paklist = {}
+  ptype = select 2, path\gsub('/', '')
+  headers = {
+    Accept: "application/vnd.github.v3+json"
+    --["User-Agent"]: "CrescentCode/Freya (User #{game.CreatorId})"
+  }
+  switch ptype
+    when 0, nil
+      -- User as repo
+      _, rlist = GET "#{ghroot}users/#{repo}/repos", headers
+      for r in *rlist
+        -- See if it's a Freya package
+        _, data = GET "#{ghraw}#{r.full_name}/master/FreyaPackage.properties", headers
+        continue unless data and (data.Name or data.Package)
+        paklist[r.name] = "github:#{r.full_name}"
+    when 1
+      -- Repo as repo
+      _, data = GET "#{ghraw}#{repo}/master/FreyaRepo.properties", headers
+      return {} unless data
+      _, tree = GET "#{ghroot}repos/#{repo}/git/trees/master", headers
+      if tree.message or tree.truncated
+        warn "[Warn][Freya GitFetch] Bad repository tree for #{repo}"
+        return {}
+      for t in *tree
+        continue unless t.type == 'tree'
+        _, pdat = GET "#{ghraw}#{repo}/master/#{t.path}/FreyaPackage.properties"
+        continue unless pdat and (pdat.Name or pdat.Package)
+        nom = data[t.path] or t.path
+        paklist[nom] = "github:#{repo}/#{nom}"
+  return paklist
 Interface = {
   Ignore: extignore
   :ghroot

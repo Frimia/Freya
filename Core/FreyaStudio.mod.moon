@@ -7,8 +7,9 @@ local ^
 ni = newproxy true
 Hybrid = (f) -> (...) ->
   return f select 2, ... if ... == ni else f ...
-  
+
 Vulcan = require script.Parent.Util.Vulcan
+RepoManager = require script.Parent.Util.RepoManager
 
 Controller = with {
     InstallPackage: Hybrid (Package, Version) ->
@@ -55,7 +56,13 @@ Controller = with {
       print "[Help][Freya Studio] Updating a package: `_G.Update(Package)`"
       print "[Help][Freya Studio] Uninstalling a package: `_G.Uninstall(Package)`"
       print "[Help][Freya Studio] Updating Freya: `_G.UpdateFreya()`"
+      print "[Help][Freya Studio] Adding repositories: `_G.AddRepo(Repository)`"
+      print "[Help][Freya Studio] Removing repositories: `_G.DelRepo(Repository)`"
+      print "[Help][Freya Studio] Updating package cache: `_G.UpdateRepo()`"
       print "[Help][Freya Studio] Don't want to use `_G`? Try `_G.Freya.Inject()`"
+    AddRepo: RepoManager.AddRepo
+    DelRepo: RepoManager.DelRepo
+    UpdateRepo: RepoManager.Update
     Inject: ->
       nenv = {
         Freya: Controller
@@ -66,6 +73,9 @@ Controller = with {
         UpdatePackage: Controller.UpdatePackage
         UninstallPacakge: Controller.UninstallPackge
         UpdateFreya: Controller.Update
+        AddRepo: Controller.AddRepo
+        DelRepo: Controller.DelRepo
+        UpdateRepo: Controller.UpdateRepo
       }
       oenv = getfenv 2
       setfenv 2, setmetatable nenv, __index: oenv
@@ -89,6 +99,9 @@ _G.Install = ni.InstallPackage
 _G.Update = ni.UpdatePackage
 _G.Uninstall = ni.UninstallPackage
 _G.UpdateFreya = ni.Update
+_G.UpdateRepo = ni.UpdateRepo
+_G.AddRepo = ni.AddRepo
+_G.DelRepo = ni.DelRepo
 
 print "[Info][Freya Studio] Freya Studio loaded. Try `_G.Freya.Help()` for more info."
 

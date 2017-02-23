@@ -8,7 +8,8 @@ ni = newproxy true
 local ^
 local InstallPackage, UpdatePackage, UninstallPackage, GetPackage
 
-GitFetch = require(script.Parent.GitFetch)
+GitFetch = require script.Parent.GitFetch
+RepoManager = require script.Parent.RepoManager
 
 Hybrid = (f) -> (...) ->
   return f select 2, ... if ... == ni else f ...
@@ -95,10 +96,14 @@ ResolvePackage = Hybrid (Package, Version) ->
             -- Freya-based package.
             -- No Freya APIs available for getting this data yet
             nil, "Freya repo APIs are not available yet"
+          when nil
+            -- Auto-resolve
+            -- Check repo manager
+            pak = RepoManager.Check Package
+            return nil, "Unable to find a package #{Package}" unless pak
+            return ResolvePackage pak
           else
-            -- Unknown protocol or no protocol.
-            -- Assume Freya packages or Github packages.
-            -- Check existing package repo list.
+            -- Unknown protocol
             nil, "No resolver available for #{Package}"
       when 'userdata'
         -- We'll assume it's a ModuleScript already. No version check.
