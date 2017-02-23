@@ -1,8 +1,8 @@
 return [[
 {
-  "Repositories": {
+  "Repositories": [
     "github:CrescentCode/FreyaPackages"
-  },
+  ],
   "Packages": {}
 }
 ]]
