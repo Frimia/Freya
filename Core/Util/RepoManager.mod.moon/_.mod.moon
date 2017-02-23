@@ -68,7 +68,7 @@ Update = -> Togglet ->
       when 'string'
         switch select 3, v\find '^(%w+):'
           when 'github'
-            for k,v in pairs GitFetch.ReadRepo v
+            for k,v in pairs GitFetch.ReadRepo v\match("^github:(.+)$")
               if RepoList.Packages[k]
                 if type RepoList.Packages[k] == 'table'
                   table.insert RepoList.Packages[k], v
