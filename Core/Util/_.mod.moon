@@ -24,7 +24,7 @@ RepoList or= {
   Packages: {}
 }
 
-Flush = -> script.RepoList.Source = HttpService\JSONEncode RepoList
+Flush = -> script.RepoList.Source = "return [===[#{HttpService\JSONEncode RepoList}]===]"
 Check = (name) ->
   v = RepoList.Packages[name]
   if v
