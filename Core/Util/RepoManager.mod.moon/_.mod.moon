@@ -66,7 +66,7 @@ Update = -> Togglet ->
         else
           RepoList.Packages[nme] = v
       when 'string'
-        switch select 3, Package\find '^(%w+):'
+        switch select 3, v\find '^(%w+):'
           when 'github'
             for k,v in pairs GitFetch.ReadRepo v
               if RepoList.Packages[k]
