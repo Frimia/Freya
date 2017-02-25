@@ -310,7 +310,8 @@ local TypeChecks do
 	};
 end;
 
-local instancetable = http:JSONDecode(game.ReplicatedStorage:WaitForChild("Freya"):WaitForChild("InheritTable").Value);
+--local instancetable = http:JSONDecode(game.ReplicatedStorage:WaitForChild("Freya"):WaitForChild("InheritTable").Value);
+local instancetable = {};
 
 local function newWrapper(private)
 	local self = {};
