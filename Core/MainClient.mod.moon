@@ -94,7 +94,7 @@ Controller = with {
           __newindex: (_,k,v) ->
             warn("Settings global",k,"as",v)
             _ENV[k] = v
-          __metatable = "Locked metatable: Freya Library Environment"
+          __metatable: "Locked metatable: Freya Library Environment"
         }
         _ENV.wrapper = wrapper
         newEnv = wrapper(newEnv)
