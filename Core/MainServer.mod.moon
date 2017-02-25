@@ -21,16 +21,30 @@ IsInstance = do
     return s and not e
   
 Components = {}
+Libraries = {}
+LiteLibs = {}
+
+BaseLib = require game.ReplicatedStorage.Freya.BaseLib
+LiteLib = require game.ReplicatedStorage.Freya.LiteLib
 
 for v in *game.ReplicatedStorage.Freya.Components.Shared\GetChildren!
   Components[v.Name] = require v
 
 for v in *game.ServerStorage.Freya.Components\GetChildren!
   Components[v.Name] = require v
+  
+for v in *game.ReplicatedStorage.Freya.Libraries\GetChildren!
+  Libraries[v.Name] = require v
+
+for v in *game.ReplicatedStorage.Freya.LiteLibraries\GetChildren!
+  LiteLibs[v.Name] = require v
 
 ComponentAdded = Components.Events.new!
 
 STUB = ->
+
+loaded = setmetatable {}, __mode: 'k'
+liteLoaded = setmetatable {}, __mode: 'k'
 
 Controller = with {
     GetComponent: Hybrid (ComponentName) ->
@@ -47,6 +61,56 @@ Controller = with {
         warn "[WARN][Freya Server] Overwriting component #{ComponentName}"
       Components[ComponentName] = ComponentValue
       ComponentAdded\Fire ComponentName
+    GenerateWrapper: Hybrid (global) ->
+      if global == nil
+        global = true
+      return BaseLib not global
+    LoadLibrary: Hybrid (LibraryName) ->
+      return error "[Error][Freya] No library named #{LibraryName} installed" unless Libraries[LibraryName]
+      lib = Libraries[LibraryName]
+      _ENV = getfenv 3
+      wrapper = BaseLib!
+      if liteLoaded[_ENV]
+        warn "[WARN][Freya] Stacking BaseLib on LiteLib."
+      if loaded[_ENV]
+        setfenv(lib, _ENV) loaded[_ENV]
+      else
+        wrapper.wlist.ref[cxitio.LoadLibrary] = cxitio.LoadLibrary
+        newEnv = setmetatable {}, {
+          __index: (_,k) ->
+            v = Wrapper.Overrides.Globals[k] or _ENV[k]
+            return v if v
+            s,v = pcall(game.GetService,game,k)
+            return v if s
+          __newindex: (_,k,v) ->
+            warn("Settings global",k,"as",v)
+            _ENV[k] = v
+          __metatable = "Locked metatable: Freya Library Environment"
+        }
+        _ENV.wrapper = wrapper
+        newEnv = wrapper(newEnv)
+        loaded[_ENV] = wrapper
+        loaded[newEnv] = wrapper
+        setfenv 3, newEnv
+        setfenv(lib, newEnv) wrapper
+    GenerateLiteWrapper: Hybrid (global) ->
+      if global == nil
+        global = true
+      return LiteLib not global
+    LoadLiteLibrary: Hybrid (name) ->
+      return error "[Error][Freya] No litelib named #{name} installed" unless LiteLibs[name]
+      lib = LiteLibs[name]
+      _ENV = getfenv 3
+      warn "[WARN][Freya] Stacking LiteLib on BaseLib." if loaded[_ENV]
+      return setfenv(lib, _ENV) liteLoaded[_ENV] if liteLoaded[_ENV]
+      wrapper = LiteLib!
+      newENV = setmetatable {}, __index: _ENV
+      _ENV.wrapper = wrapper
+      newENV = wrapper newENV
+      liteLoaded[_ENV] = wrapper
+      liteLoaded[newENV] = wrapper
+      setfenv 3, newENV
+      setfenv(lib, newENV) wrapper
   }
   .GetService = .GetComponent
   .SetService = .SetComponent
