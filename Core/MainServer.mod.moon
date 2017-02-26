@@ -24,8 +24,8 @@ Components = {}
 Libraries = {}
 LiteLibs = {}
 
-BaseLib = require game.ReplicatedStorage.Freya.BaseLib
-LiteLib = require game.ReplicatedStorage.Freya.LiteLib
+BaseLib = require game.ReplicatedStorage.Freya.Core.BaseLib
+LiteLib = require game.ReplicatedStorage.Freya.Core.LiteLib
 
 for v in *game.ReplicatedStorage.Freya.Components.Shared\GetChildren!
   Components[v.Name] = require v
