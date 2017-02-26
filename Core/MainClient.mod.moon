@@ -24,8 +24,8 @@ Components = {}
 Libraries = {}
 LiteLibs = {}
 
-BaseLib = require game.ReplicatedStorage.Freya.BaseLib
-LiteLib = require game.ReplicatedStorage.Freya.LiteLib
+BaseLib = require game.ReplicatedStorage.Freya\WaitForChild("Core")\WaitForChild "BaseLib"
+LiteLib = require game.ReplicatedStorage.Freya.Core\WaitForChild "LiteLib"
 
 with game.ReplicatedStorage.Freya.Components
   .Shared\WaitForChild "Events"
