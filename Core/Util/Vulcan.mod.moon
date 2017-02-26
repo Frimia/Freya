@@ -11,8 +11,18 @@ local InstallPackage, UpdatePackage, UninstallPackage, GetPackage
 GitFetch = require script.Parent.GitFetch
 RepoManager = require script.Parent.RepoManager
 
-Hybrid = (f) -> (...) ->
+Hybrid = (f) -> (...) -> -- Decorator Hybrid
   return f select 2, ... if ... == ni else f ...
+
+Togglet = (f) -> (...) -> -- Decorator Togglet
+  olden = HttpService.HttpEnabled
+  pcall ->
+    HttpService.HttpEnabled = true
+  if HttpService.HttpEnabled
+    f ...
+    pcall -> HttpService.HttpEnabled = olden
+  else
+    warn "[Warn][Freya Vulcan] HTTP requests are disabled."
 
 Locate = (Type) ->
   return switch Type
@@ -71,51 +81,51 @@ ResolveVersion = Hybrid (Version) ->
         warn "Uncomparable version format. Assuming simply major version."
         major: major
 
-ResolvePackage = Hybrid (Package, Version) ->
-    switch type Package
-      when 'number'
-        -- AssetId for package.
-        -- Versions are irrelevant.
-        s, package = pcall -> game\GetService"InsertService"\LoadAsset Package
-        return nil, "Unable to get package: #{package}" unless s
-        s, package = pcall require, package
-        return nil, "Unable to require package: #{package}" unless s
-        return nil, "Package does not return a table" unless type(package) == 'table'
-        return package
-      when 'string'
-        --  Determine protocol
-        switch select 3, Package\find '^(%w+):'
-          when 'github'
-            warn "Without authentication, github requests will be heavily ratelimited."
-            -- Github-based package.
-            -- No extended support (Scripts only)
-            repo = Package\gsub('^github:','')
-            print "[Info][Freya Vulcan] Building #{repo} from Github."
-            return GitFetch.GetPackage repo
-          when 'freya'
-            -- Freya-based package.
-            -- No Freya APIs available for getting this data yet
-            nil, "Freya repo APIs are not available yet"
-          when nil
-            -- Auto-resolve
-            -- Check repo manager
-            pak = RepoManager.Check Package
-            return nil, "Unable to find a package #{Package}" unless pak
-            return ResolvePackage pak
-          else
-            -- Unknown protocol
-            nil, "No resolver available for #{Package}"
-      when 'userdata'
-        -- We'll assume it's a ModuleScript already. No version check.
-        s, err = pcall require, Package
-        return nil, "Unable to load package: #{err}" unless s
-        return nil, "Package does not return a table" unless type(err) == 'table'
-        return err
-      when 'table'
-        -- It's a boy! No version check.
-        return Package
-      else
-        return nil, "Invalid package format."
+ResolvePackage = Hybrid Togglet (Package, Version) ->
+  switch type Package
+    when 'number'
+      -- AssetId for package.
+      -- Versions are irrelevant.
+      s, package = pcall -> game\GetService"InsertService"\LoadAsset Package
+      return nil, "Unable to get package: #{package}" unless s
+      s, package = pcall require, package
+      return nil, "Unable to require package: #{package}" unless s
+      return nil, "Package does not return a table" unless type(package) == 'table'
+      return package
+    when 'string'
+      --  Determine protocol
+      switch select 3, Package\find '^(%w+):'
+        when 'github'
+          warn "Without authentication, github requests will be heavily ratelimited."
+          -- Github-based package.
+          -- No extended support (Scripts only)
+          repo = Package\gsub('^github:','')
+          print "[Info][Freya Vulcan] Building #{repo} from Github."
+          return GitFetch.GetPackage repo
+        when 'freya'
+          -- Freya-based package.
+          -- No Freya APIs available for getting this data yet
+          nil, "Freya repo APIs are not available yet"
+        when nil
+          -- Auto-resolve
+          -- Check repo manager
+          pak = RepoManager.Check Package
+          return nil, "Unable to find a package #{Package}" unless pak
+          return ResolvePackage pak
+        else
+          -- Unknown protocol
+          nil, "No resolver available for #{Package}"
+    when 'userdata'
+      -- We'll assume it's a ModuleScript already. No version check.
+      s, err = pcall require, Package
+      return nil, "Unable to load package: #{err}" unless s
+      return nil, "Package does not return a table" unless type(err) == 'table'
+      return err
+    when 'table'
+      -- It's a boy! No version check.
+      return Package
+    else
+      return nil, "Invalid package format."
 
 CompareVersions = (v1, v2) -> -- To, from
   v1 = ResolveVersion v1.Version
