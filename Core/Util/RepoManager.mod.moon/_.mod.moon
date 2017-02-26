@@ -58,18 +58,26 @@ Update = -> Togglet ->
     switch type v
       when 'number'
         def = require v
-        nme = def.Name or def.Package.Name
-        if RepoList.Packages[nme]
-          if type(RepoList.Packages[nme]) == 'table'
-            table.insert RepoList.Packages[nme], v
+        -- Packages are not repos
+        unless type(def) == 'table'
+          warn "[Warn][Freya RepoManager] Skipping ##{v} (Malformed)"
+          continue
+        print "[Info][Freya RepoManager] Reading ##{v}"
+        for k,v in pairs def
+          print "[Info][Freya RepoManager] * Found #{k} as #{v}"
+          if RepoList.Packages[k]
+            if type(RepoList.Packages[k]) == 'table'
+              table.insert RepoList.Packagesk], v
+            else
+              RepoList.Packages[k] = {RepoList.Packages[k], v}
           else
-            RepoList.Packages[nme] = {RepoList.Packages[nme], v}
-        else
-          RepoList.Packages[nme] = v
+            RepoList.Packages[k] = v
       when 'string'
         switch select 3, v\find '^(%w+):'
           when 'github'
+            print "[Info][Freya RepoManager] Reading #{v}"
             for k,v in pairs GitFetch.ReadRepo v\match("^github:(.+)$")
+              print "[Info][Freya RepoManager] * Found #{k} as #{v}"
               if RepoList.Packages[k]
                 if type(RepoList.Packages[k]) == 'table'
                   table.insert RepoList.Packages[k], v
