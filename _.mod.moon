@@ -37,7 +37,7 @@ if Freya
     Packages = require script.Core.PackageList
     Vulcan = require script.Core.Util.Vulcan
     RepoList = Freya.Util\FindFirstChild "RepoManager"
-    if RepoList
+    if RepoList and RepoList\FindFirstChild "RepoList"
       RepoList = RepoList.RepoList
       RepoList.Parent = nil
     else
