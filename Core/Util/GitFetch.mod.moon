@@ -328,12 +328,14 @@ ReadRepo = (repo) ->
       -- Repo as repo
       return {} unless TEST "#{ghraw}#{repo}/master/FreyaRepo.properties"
       _, data = GET "#{ghraw}#{repo}/master/FreyaRepo.properties", headers
-      return {} unless data
+      unless data
+        warn "[Warn][Freya GitFetch] Bad FreyaRepo file for #{repo}"
+        return {}
       _, tree = GET "#{ghroot}repos/#{repo}/git/trees/master", headers
       if tree.message or tree.truncated
         warn "[Warn][Freya GitFetch] Bad repository tree for #{repo}"
         return {}
-      for t in *tree
+      for t in *tree.tree
         continue unless t.type == 'tree'
         continue unless TEST "#{ghraw}#{repo}/master/#{t.path}/FreyaPackage.properties"
         _, pdat = GET "#{ghraw}#{repo}/master/#{t.path}/FreyaPackage.properties"
