@@ -201,6 +201,7 @@ Vulcan = {
         opkg\Destroy!
       if .Install then .Install Package
       if pkgloc then .Package.Parent = pkgloc
+      .Package.Name = .Name
       if .Package\IsA "Script"
         -- Sort out other package metadata for Scripts
         pak = .Package
@@ -217,7 +218,7 @@ Vulcan = {
       sav = {
         Resource: .Package
         Origin:
-          Name: .Name or .Package.Name
+          Name: .Name
           Type: .Type
           Version: .Version
       }
@@ -276,6 +277,7 @@ Vulcan = {
           opkg.Enabled.Parent = .Package
       opkg\Destroy!
       if pkgloc then .Package.Parent = pkgloc
+      .Package.Name = .Name
       sav = {
         Resource: .Package
         Origin:
