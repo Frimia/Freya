@@ -335,12 +335,18 @@ ReadRepo = (repo) ->
       if tree.message or tree.truncated
         warn "[Warn][Freya GitFetch] Bad repository tree for #{repo}"
         return {}
+      ldat = {}
+      for k,v in pairs data
+        if type(v) == 'string' and not v\find ':'
+          ldat[k] = v
+        else
+          paklst[k] = v
       for t in *tree.tree
         continue unless t.type == 'tree'
         continue unless TEST "#{ghraw}#{repo}/master/#{t.path}/FreyaPackage.properties"
         _, pdat = GET "#{ghraw}#{repo}/master/#{t.path}/FreyaPackage.properties"
         continue unless pdat and (pdat.Name or pdat.Package)
-        nom = data[t.path] or t.path
+        nom = ldat[t.path] or t.path
         paklist[nom] = "github:#{repo}/#{nom}"
   return paklist
 Interface = {
