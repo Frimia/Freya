@@ -24,10 +24,6 @@ end;
 local echo = function(...)
 	return ...
 end;
-local echoerror = function(e,s)
-	s = s or 1;
-	error(e,s+1);
-end;
 
 local convert do
 	local ignorerec = {};
@@ -86,7 +82,7 @@ local convert do
 					end;
 					return convertAll(from, to, this, unpack(returns, 2, returns.n));
 				else
-					echoerror(returns[2], 2);
+					error(returns[2], 2);
 				end;
 			end;
 			to.pairs[value] = ret;
@@ -124,14 +120,13 @@ local convert do
 						mt[e] = m;
 					end;
 				else
-					for t,v in pairs(this.Overrides.Types) do
-						if this.TypeChecks[t] and pcall(this.TypeChecks[t],value) then
-							for e,m in pairs(v) do
-								mt[e] = m;
-							end
-							break;
-						end;
-					end
+          local t = typeof(value);
+          local v = this.Overrides.Types[t];
+          if v then
+            for e,m in pairs(v) do
+              mt[e] = m;
+            end;
+          end;
 				end
 			else
 				for event, metamethod in pairs(this.inversemt) do
@@ -292,24 +287,6 @@ end;
 
 WrapperClass._rawConvert = convert;
 
-local TypeChecks do
-	local tv2 = Vector2.new(0,0);
-	local con = game.Changed.connect;
-	local tsp = Instance.new("Part");
-	local ud = UDim.new(0,0);
-	local tui = Instance.new("ImageLabel");
-	local BrickColor = BrickColor;
-	TypeChecks = {
-		Color3 = BrickColor.new;
-		Vector2 = function(o) return tv2 + o end;
-		Event = function(o) con(o,function()end):disconnect() end;
-		Vector3 = function(o) tsp.Size = o end;
-		UDim = function(o) return ud+o end;
-		UDim2 = function(o) tui.Position = o end;
-		BrickColor = function(o) tsp.BrickColor = o end;
-	};
-end;
-
 --local instancetable = http:JSONDecode(game.ReplicatedStorage:WaitForChild("Freya"):WaitForChild("InheritTable").Value);
 local instancetable = {};
 
@@ -349,7 +326,6 @@ local function newWrapper(private)
 	self.genSeed = tick();
 
 	self.TypeIdentities = _G.TypeIdentities or setmetatable({},{__mode = 'k'});
-	self.TypeChecks = TypeChecks;
 
 	for e,m in pairs(defaultmt) do
 		self.mt[e] = convert(self.ulist,self.wlist,self,m);
