@@ -81,7 +81,11 @@ else
   print "[Freya] Installing Freya " .. script.Version.Value
   require(script.unpack) script
 
+-- Update package cache
+FreyaStudio = require FreyaStudio
+FreyaStudio.UpdateRepo!
+
 -- Set the HttpService state back to the original
 HttpService.HttpEnabled = HttpEnabled
 
-return require FreyaStudio
+return FreyaStudio
