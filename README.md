@@ -6,7 +6,7 @@ Freya is a framework and template for developing with Roblox. Everything which F
 
 - [Extended Events](https://docs.crescentcode.net/Freya/Components/Events)
 - [All-to-all networkable signals](https://docs.crescentcode.net/Freya/Components/Intents)
-- [Powerful permissions](https://docs.cresentcode.net/Freya/Components/Permissions)
+- [Powerful permissions](https://docs.crescentcode.net/Freya/Components/Permissions)
 - [Stateful Input](https://docs.crescentcode.net/Freya/Components/Input)
 - [Valkyrie](https://valkyrie.crescentcode.net/) support
 - [Package management](https://docs.crescentcode.net/Freya/Core/Vulcan)
