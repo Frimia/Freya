@@ -67,7 +67,7 @@ Update = -> Togglet ->
           print "[Info][Freya RepoManager] * Found #{k} as #{v}"
           if RepoList.Packages[k]
             if type(RepoList.Packages[k]) == 'table'
-              table.insert RepoList.Packagesk], v
+              table.insert RepoList.Packages[k], v
             else
               RepoList.Packages[k] = {RepoList.Packages[k], v}
           else
