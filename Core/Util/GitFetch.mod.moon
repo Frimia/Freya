@@ -340,7 +340,7 @@ ReadRepo = (repo) ->
         if type(v) == 'string' and not v\find ':'
           ldat[k] = v
         else
-          paklst[k] = v
+          paklist[k] = v
       for t in *tree.tree
         continue unless t.type == 'tree'
         continue unless TEST "#{ghraw}#{repo}/master/#{t.path}/FreyaPackage.properties"
