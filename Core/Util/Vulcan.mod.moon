@@ -20,10 +20,13 @@ Togglet = (f) -> (...) -> -- Decorator Togglet
   pcall ->
     HttpService.HttpEnabled = true
   if HttpService.HttpEnabled
-    f ...
-    pcall -> HttpService.HttpEnabled = olden
+    return ((...) -> 
+      pcall -> HttpService.HttpEnabled = olden
+      return ...
+    ) f ...
   else
     warn "[Warn][Freya Vulcan] HTTP requests are disabled."
+    return f ...
 
 Locate = (Type) ->
   return switch Type
