@@ -10,6 +10,7 @@ local InstallPackage, UpdatePackage, UninstallPackage, GetPackage
 
 GitFetch = require script.Parent.GitFetch
 RepoManager = require script.Parent.RepoManager
+HttpService = game\GetService "HttpService"
 
 Hybrid = (f) -> (...) -> -- Decorator Hybrid
   return f select 2, ... if ... == ni else f ...
