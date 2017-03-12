@@ -114,6 +114,7 @@ local InputSources, LinkedTypes, LinkedNames do
       Insert = make("Keyboard","Insert");
       KeypadZero = make("Keyboard","KeypadZero");
       Tilde = make("Keyboard","Tilde");
+      Enter = make("Keyboard","Return");
     };
     Controller1 = {
       A = make("ControllerButton", "ButtonA");
@@ -243,7 +244,7 @@ local InputSources, LinkedTypes, LinkedNames do
     Keyboard.LShift = Keyboard.Shift;
     Keyboard.Cmd = Keyboard.Super;
     Keyboard.LeftShift = Keyboard.Shift;
-
+    Keyboard.Return = Keyboard.Enter;
 
     -- ~ Keyboard Translation aliases
     --[[local _translations = {};
