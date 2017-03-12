@@ -30,7 +30,7 @@ local ActionMt = {
   __index = function(this,k)
     return ActionClass[k] or ActionLinks[this][k];
   end;
-  __metatable = "Locked metatable: Valkyrie";
+  __metatable = "Locked metatable: Freya";
   __len = function(this)
     return ActionLinks[this].FireCount;
   end;
@@ -321,7 +321,7 @@ local InputSources, LinkedTypes, LinkedNames do
     local mt = getmetatable(np);
     mt.__index = v;
     mt.__tostring = function()return k end;
-    mt.__metatable = "Locked metatable: Valkyrie";
+    mt.__metatable = "Locked metatable: Freya";
     InputSources[k] = np;
   end;
   InputSources.Controller = InputSources.Controller1;
@@ -331,8 +331,8 @@ local InputSources, LinkedTypes, LinkedNames do
   InputSources = newproxy(true);
   local mt = getmetatable(InputSources);
   mt.__index = ni;
-  mt.__metatable = "Locked metatable: Valkyrie";
-  mt.__tostring = function() return "Valkyrie Input Sources" end;
+  mt.__metatable = "Locked metatable: Freya";
+  mt.__tostring = function() return "Freya Input Sources" end;
 end;
 local InputDirections = {
   Up = newproxy(false);
@@ -355,8 +355,8 @@ do
   Controller.InputDirections = newproxy(true);
   local mt = getmetatable(Controller.InputDirections);
   mt.__index = id;
-  mt.__metatable = "Locked metatable: Valkyrie";
-  mt.__tostring = function() return "Valkyrie Input Directions" end;
+  mt.__metatable = "Locked metatable: Freya";
+  mt.__tostring = function() return "Freya Input Directions" end;
 end;
 
 -- Make input objects and bind at the same time if the input is not already bound.
@@ -443,7 +443,7 @@ CreateInputState = function(source, meta)
   mt.__index = Props;
   InputTracker[ni] = Props;
   mt.__tostring = function()
-    return "Valkyrie Input: "..iName.." ("..iType..")";
+    return "Freya Input: "..iName.." ("..iType..")";
   end;
   if iType == 'Keyboard' then
     Props.Key = iName;
@@ -614,17 +614,17 @@ function Controller.CreateAction(...)
   local actionname,defaultaction = extract(...);
   assert(
     type(actionname) == 'string',
-    "[Error][Valkyrie Input] (in CreateAction): Supplied action name was not a string",
+    "[Error][Freya Input] (in CreateAction): Supplied action name was not a string",
     2
   );
   assert(
     type(defaultaction) == 'function',
-    "[Error][Valkyrie Input] (in CreateAction): Supplied action callback was not a function",
+    "[Error][Freya Input] (in CreateAction): Supplied action callback was not a function",
     2
   );
   if Actions[actionname] then
     return error(
-      "[Error][Valkyrie Input] (in CreateAction): Supplied action name is already bound to an Action ("..actionname..")",
+      "[Error][Freya Input] (in CreateAction): Supplied action name is already bound to an Action ("..actionname..")",
       2
     );
   end;
@@ -648,7 +648,7 @@ function Controller.GetAction(...)
   local actionname = extract(...);
   assert(
     type(actionname) == 'string',
-    "[Error][Valkyrie Input] (in GetAction): Supplied action name was not a string",
+    "[Error][Freya Input] (in GetAction): Supplied action name was not a string",
     2
   );
   return Actions[actionname];
@@ -656,14 +656,14 @@ end;
 
 function Controller.EmulateInput(...)
   local source, dir, meta, data = extract(...);
-  assert(source, "[Error][Valkyrie Input] (in Controller.EmulateInput()): You need to supply an Input source as #1", 2);
+  assert(source, "[Error][Freya Input] (in Controller.EmulateInput()): You need to supply an Input source as #1", 2);
   local Type, Name = LinkedTypes[source],LinkedNames[source];
   assert(
     Type and Name,
-    "[Error][Valkyrie Input] (in Controller.EmulateInput()): You need to supply a valid Valkyrie Input as #1, did you supply a string by accident?",
+    "[Error][Freya Input] (in Controller.EmulateInput()): You need to supply a valid Freya Input as #1, did you supply a string by accident?",
     2
   );
-  assert(dir, "[Error][Valkyrie Input] (in Controller.EmulateInput()): You need to supply an Input direction as #2", 2);
+  assert(dir, "[Error][Freya Input] (in Controller.EmulateInput()): You need to supply an Input direction as #2", 2);
   do local suc = false;
     for k,v in next, InputDirections do
       if v == dir then
@@ -672,7 +672,7 @@ function Controller.EmulateInput(...)
       end;
     end;
     if not suc then
-      error("[Error][Valkyrie Input] (in Controller.EmulateInput()): You need to supply a valid Valkyrie Input direction object as #2", 2);
+      error("[Error][Freya Input] (in Controller.EmulateInput()): You need to supply a valid Freya Input direction object as #2", 2);
     end;
   end;
   local i = CreateInputState(source, meta);
@@ -708,7 +708,7 @@ function ActionClass:SetFlag(flag, value)
     NoGPE[self] = value;
   else
     return error(
-      "[Error][Valkyrie Input] (in Action:SetFlag()): "..flag.." is not a valid flag.",
+      "[Error][Freya Input] (in Action:SetFlag()): "..flag.." is not a valid flag.",
       2
     );
   end;
@@ -722,13 +722,13 @@ do
     local finishers = setmetatable({},{__mode = 'k'});
     local disconnectAction = function(self)
       if not self then
-        error("[Error][Valkyrie Input] (in connection:disconnect()): No connection given. Did you forget to call this as a method?", 2);
+        error("[Error][Freya Input] (in connection:disconnect()): No connection given. Did you forget to call this as a method?", 2);
       end;
       if finishers[self] then
         finishers[self](self);
         finishers[self] = nil;
       else
-        warn("[Warn][Valkyrie Input] (in connection:disconnect()): Unable to disconnect disconnected action for ValkyrieInput");
+        warn("[Warn][Freya Input] (in connection:disconnect()): Unable to disconnect disconnected action for FreyaInput");
       end;
     end;
     local cmt = {
@@ -737,9 +737,9 @@ do
           return disconnectAction;
         end;
       end;
-      __metatable = "Locked metatable: Valkyrie";
+      __metatable = "Locked metatable: Freya";
       __tostring = function()
-        return "Connection object for ValkyrieInput";
+        return "Connection object for FreyaInput";
       end;
     };
     CustomConnection = function(disconnectFunc)
@@ -778,8 +778,7 @@ do
 
     -- Grab the input object for the source
     local iobj = CreateInputState(source);
-
-    -- Wrap the function in a binding
+Freya    -- Wrap the function in a binding
     local func,bfunc = self.Action
     if dir == InputDirections.DownUp then
       local down = false;
@@ -813,14 +812,14 @@ do
     -- ~ Binding actions for Instances with input sources
     -- ~ Similar to BindControl
     -- @object: Binding target
-    assert(source, "[Error][Valkyrie Input] (in ActionClass:BindSource()): You need to supply an Input source as #1", 2);
+    assert(source, "[Error][Freya Input] (in ActionClass:BindSource()): You need to supply an Input source as #1", 2);
     local Type, Name = LinkedTypes[source],LinkedNames[source];
     assert(
       Type and Name,
-      "[Error][Valkyrie Input] (in ActionClass:BindSource()): You need to supply a valid Valkyrie Input as #1, did you supply a string by accident?",
+      "[Error][Freya Input] (in ActionClass:BindSource()): You need to supply a valid Freya Input as #1, did you supply a string by accident?",
       2
     );
-    assert(dir, "[Error][Valkyrie Input] (in ActionClass:BindSource()): You need to supply an Input direction as #2", 2);
+    assert(dir, "[Error][Freya Input] (in ActionClass:BindSource()): You need to supply an Input direction as #2", 2);
     do local suc = false;
       for k,v in next, InputDirections do
         if v == dir then
@@ -829,10 +828,10 @@ do
         end;
       end;
       if not suc then
-        error("[Error][Valkyrie Input] (in ActionClass:BindSource()): You need to supply a valid Valkyrie Input direction object as #2", 2);
+        error("[Error][Freya Input] (in ActionClass:BindSource()): You need to supply a valid Freya Input direction object as #2", 2);
       end;
     end;
-    assert(object, "[Error][ValkyrieInput] (in ActionClass:BindSource()): You need to supply a valid source as #3", 2);
+    assert(object, "[Error][FreyaInput] (in ActionClass:BindSource()): You need to supply a valid source as #3", 2);
 
     -- Grab the input object for the source
     local iobj = CreateInputState(source, object);
@@ -888,7 +887,7 @@ do
     end
     tempsources = nil;
     if errmsg then
-      error("[Error][Valkyrie Input] (in ActionClass:BindContext()): "..errmsg, 2);
+      error("[Error][Freya Input] (in ActionClass:BindContext()): "..errmsg, 2);
       return;
     end
 
@@ -960,7 +959,7 @@ do
     return bind;
   end;
   function ActionClass:BindCombo(sources)
-    -- @sources: Table array of Valkyrie Input Sources
+    -- @sources: Table array of Freya Input Sources
     -- | When they're all down, it fires. Once.
 
     local BindCollection = {};
@@ -1006,7 +1005,7 @@ do
       for i=1, #BindCollection do
         BindCollection[i]:disconnect();
       end;
-      error("[Error][Valkyrie Input] (in ActionClass:BindCombo()): "..errmsg, 2);
+      error("[Error][Freya Input] (in ActionClass:BindCombo()): "..errmsg, 2);
     end;
 
     --> Connection
@@ -1021,7 +1020,7 @@ do
     return bind;
   end;
   function ActionClass:BindSequence(sources)
-    -- @sources: Table array of Valkyrie Input Sources
+    -- @sources: Table array of Freya Input Sources
     -- | Sources are to be checked in order. No tree building here.
     local BindCollection = {};
     local curr = 1;
@@ -1064,7 +1063,7 @@ do
   end;
   function ActionClass:BindTouchAction(source, object)
     -- ~ Specific touch events like tapping, pinching, scrolling etc
-    assert(utilIsTouch(source), "[Error][Valkyrie Input] (in ActionClass:BindTouchAction()): Supplied input source was not a TouchAction", 2);
+    assert(utilIsTouch(source), "[Error][Freya Input] (in ActionClass:BindTouchAction()): Supplied input source was not a TouchAction", 2);
     local state = CreateInputState(source, object);
 
     --> Connection
@@ -1076,22 +1075,22 @@ do
     return bind;
   end;
   function ActionClass:BindHold(source, time, interval)
-    assert(source, "[Error][Valkyrie Input] (in ActionClass:BindHold()): You need to supply an Input source as #1", 2);
+    assert(source, "[Error][Freya Input] (in ActionClass:BindHold()): You need to supply an Input source as #1", 2);
     local Type, Name = LinkedTypes[source],LinkedNames[source];
     assert(
       Type and Name,
-      "[Error][Valkyrie Input] (in ActionClass:BindHold()): You need to supply a valid Valkyrie Input as #1, did you supply a string by accident?",
+      "[Error][Freya Input] (in ActionClass:BindHold()): You need to supply a valid Freya Input as #1, did you supply a string by accident?",
       2
     );
     assert(
       type(time) == 'number',
-      "[Error][Valkyrie Input] (in ActionClass:BindHold()): You need to supply a hold time as #1",
+      "[Error][Freya Input] (in ActionClass:BindHold()): You need to supply a hold time as #1",
       2
     );
     interval = interval or -1;
     assert(
       type(interval) == 'number',
-      "[Error][Valkyrie Input] (in ActionClass:BindHold()): Supplied repeat interval was not a number",
+      "[Error][Freya Input] (in ActionClass:BindHold()): Supplied repeat interval was not a number",
       2
     )
 
@@ -1136,9 +1135,9 @@ do
   mt.__index = Controller;
 
   mt.__tostring = function()
-    return "Valkyrie Input controller";
+    return "Freya Input controller";
   end;
-  mt.__metatable = "Locked metatable: Valkyrie";
+  mt.__metatable = "Locked metatable: Freya";
 end;
 
 return this;
