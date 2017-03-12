@@ -8,7 +8,7 @@
 wait(1); -- I just want to hope that'll allow me to make sure everything is in.
 for k,v in next, script.Parent:GetChildren() do
   if v ~= script then
-    if v:IsA("LocalScript") and v.Enabled.Value then
+    if v:IsA("LocalScript") and v:WaitForChild("Enabled").Value then
       if v:FindFirstChild("LoadOrder") and v.LoadOrder.Value == -1 then
         v.Disabled = false;
       end
@@ -16,12 +16,31 @@ for k,v in next, script.Parent:GetChildren() do
   end
 end
 for k,v in next, game.ReplicatedFirst:WaitForChild("FreyaUserscripts"):GetChildren() do
-  if v:IsA("LocalScript") and v.Enabled.Value then
+  if v:IsA("LocalScript") and v:WaitForChild("Enabled").Value then
     if v:FindFirstChild("LoadOrder") and v.LoadOrder.Value == -1 then
       v.Disabled = false;
     end
   end
 end
+
+-- Connect for anything getting added, just in case.
+local w = false;
+game.ReplicatedFirst.FreyaUserScripts.ChildAdded:connect(function(c)
+  if v:IsA("LocalScript") and v:WaitForChild("Enabled").Value then
+    w = true
+    if v:FindFirstChild("LoadOrder") and v.LoadOrder.Value == -1 then
+      v.Disabled = false;
+    end
+  end
+end)
+script.Parent.ChildAdded:connect(function(c)
+  if v:IsA("LocalScript") and v:WaitForChild("Enabled").Value then
+    w = true
+    if v:FindFirstChild("LoadOrder") and v.LoadOrder.Value == -1 then
+      v.Disabled = false;
+    end
+  end
+end)
 
 -- Get our Freya Main
 local Freya = require(game.ReplicatedStorage:WaitForChild("Freya"):WaitForChild("Main"));
@@ -49,6 +68,9 @@ for k,v in next, game.ReplicatedFirst.FreyaUserscripts:GetChildren() do
     end
   end
 end
+
+while w do w = false; wait(1) end;
+
 table.sort(rflist, function(a,b)
   local loada = a:FindFirstChild("LoadOrder")
   loada = loada and loada.Value or 1
