@@ -778,7 +778,7 @@ do
 
     -- Grab the input object for the source
     local iobj = CreateInputState(source);
-Freya    -- Wrap the function in a binding
+    -- Wrap the function in a binding
     local func,bfunc = self.Action
     if dir == InputDirections.DownUp then
       local down = false;
