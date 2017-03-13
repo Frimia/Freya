@@ -30,7 +30,10 @@ Check = (name) ->
   if v
     return switch type v
       when 'table'
-        warn "[Warn][Freya RepoManager] Multiple packages found for #{name}, selecting the first."
+        warn "[Warn][Freya RepoManager] Multiple packages found for #{name},"
+        for nv in *v
+          warn "[Warn][Freya RepoManager] * #{nv}"
+        warn "[Warn][Freya RepoManager] Selecting #{v[1]}"
         v[1]
       else
         v
