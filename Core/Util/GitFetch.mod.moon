@@ -343,7 +343,7 @@ ReadRepo = (repo) ->
           paklist[k] = v
       do
         _ldat = {}
-        for k,v in pairs _ldat
+        for k,v in pairs ldat
           lt = _ldat[v] or {}
           lt[#lt+1] = k
           _ldat[v] = lt
