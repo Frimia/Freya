@@ -355,6 +355,7 @@ Interface = {
   :ghraw
   :POST
   :GET
+  :TEST
   :GetPackage
   :ReadRepo
 }
