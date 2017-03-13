@@ -341,13 +341,23 @@ ReadRepo = (repo) ->
           ldat[k] = v
         else
           paklist[k] = v
+      do
+        _ldat = {}
+        for k,v in pairs _ldat
+          lt = _ldat[v] or {}
+          lt[#lt+1] = k
+          _ldat[v] = lt
+        ldat = _ldat
       for t in *tree.tree
         continue unless t.type == 'tree'
         continue unless TEST "#{ghraw}#{repo}/master/#{t.path}/FreyaPackage.properties"
         _, pdat = GET "#{ghraw}#{repo}/master/#{t.path}/FreyaPackage.properties"
         continue unless pdat and (pdat.Name or pdat.Package)
-        nom = ldat[t.path] or t.path
+        nom = t.path
         paklist[nom] = "github:#{repo}/#{nom}"
+        if ldat[nom]
+          for v in *ldat[nom]
+            paklist[v] = paklist[nom]
   return paklist
 Interface = {
   Ignore: extignore
