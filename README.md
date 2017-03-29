@@ -8,17 +8,17 @@ Freya is a framework and template for developing with Roblox. Everything which F
 - [All-to-all networkable signals](https://docs.crescentcode.net/Freya/Components/Intents)
 - [Powerful permissions](https://docs.crescentcode.net/Freya/Components/Permissions)
 - [Stateful Input](https://docs.crescentcode.net/Freya/Components/Input)
+- [Game rules](https://github.com/CrescentCode/Freya/blob/master/Components/Shared/Rules.mod.moon)
 - [Valkyrie](https://docs.crescentcode.net/Valkyrie) support
 - [Package management](https://docs.crescentcode.net/Freya/Core/Vulcan)
 - Magical seamless wrappers ([BaseLib](https://docs.crescentcode.net/Freya/Libraries) and [LiteLib](https://docs.crescentcode.net/Freya/LiteLibraries))
-- [Bit stream manipulation](https://docs.crescentcode.net/Freya/Components/BitStream)
+- [Official](https://github.com/CrescentCode/FreyaPackages) and user packages (eg [FreyaBits](https://github.com/eLunate/FreyaBits/))
 
 ### Planned features
 
 - Nevermore compatibility
 - Extended networking management
 - Extended serialization/deserialization
-- Extended game rules API
 - Freya standards
 
 ## Setting up Freya
