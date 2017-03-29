@@ -33,6 +33,10 @@ All active modules will have a BoolValue in them called `Enabled`. Ticking the c
 
 All passive modules can be loaded via the main Freya controller, or by requiring them manually. Their settings should handled via `Freya.Settings` in the relevant section, when available.
 
+### Using Freya
+
+To get using Freya, you might want to take a look at the [getting started guide](https://docs.crescentcode.net/Freya/Examples/GettingStarted). Alternatively, try installing Freya Colours to test it instead: Put `_G.Install "Colours"` in the Studio command bar (make sure the game is **not** running) and watch the magic happen.
+
 ### Uninstalling Freya
 
 Didn't like Freya? That's a shame. If you have FreyaStudio loaded, you can do `_G.Freya.Uninstall()` and it will clean up Freya for you. If you don't have FreyaStudio injected, you can load it with `require(game.ServerStorage.Freya.FreyaStudio)`.
@@ -56,7 +60,3 @@ The documentation can be found [here](https://docs.crescentcode.net/Freya), and 
 ## What's in a name?
 
 Freya (Freyja, traditionally) is the Norse god of a lot of things, but mostly the reason Freya was chosen is due to her relationship with valkyries, which made it a suitable name for the successor of the development section of [Valkyrie](https://github.com/CrescentCode/ValkyrieFramework)
-
-## Acknowledgements
-
-- Freya BitStream uses a modified version of the [BitBuffer](https://www.roblox.com/library/174612085/BitBuffer-Module) module by [Stravant](https://www.roblox.com/users/80119/profile/). 
