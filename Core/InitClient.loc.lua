@@ -48,6 +48,8 @@ local Freya = require(game.ReplicatedStorage:WaitForChild("Freya"):WaitForChild(
 _G.Freya = Freya
 _G.FreyaClient = Freya
 
+Freya.Init();
+
 -- ReplicatedFirst, after Freya exists.
 local rflist = {}
 for k,v in next, script.Parent:GetChildren() do
