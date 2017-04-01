@@ -113,33 +113,81 @@ Controller = with {
       setfenv(lib, newENV) wrapper
     Init: Hybrid (name) ->
       return if _didinit
+      dget = =>
+        q = {}
+        r = {}
+        n = @
+        while n
+          for v in *n\GetChildren!
+            q[#q+1] = v
+            if v\IsA "ModuleScript"
+              name = {}
+              t = v
+              while t ~= @
+                table.insert name, 1, t.Name
+                t = t.Parent
+              name = table.concat name, '/'
+              r[name] = v
+          n = q[#q]
+          q[#q] = nil
+        return r
+      game.ReplicatedStorage.Freya.Components.Shared.DescendantAdded\connect (obj) ->
+        return unless obj\IsA "ModuleScript"
+        name = {}
+        t = obj
+        while t ~= game.ReplicatedStorage.Freya.Components.Shared
+          table.insert name, 1, t.Name
+          t = t.Parent
+        name = table.concat name, '/'
+        Components[name] = require obj
+        ComponentAdded\Fire name
+      game.ReplicatedStorage.Freya.Components.Client.DescendantAdded\connect (obj) ->
+        return unless obj\IsA "ModuleScript"
+        name = {}
+        t = obj
+        while t ~= game.ReplicatedStorage.Freya.Components.Client
+          table.insert name, 1, t.Name
+          t = t.Parent
+        name = table.concat name, '/'
+        Components[name] = require obj
+        ComponentAdded\Fire name
+      game.ReplicatedStorage.Freya.Libraries.DescendantAdded\connect (obj) ->
+        return unless obj\IsA "ModuleScript"
+        name = {}
+        t = obj
+        while t ~= game.ReplicatedStorage.Freya.Libraries
+          table.insert name, 1, t.Name
+          t = t.Parent
+        name = table.concat name, '/'
+        Libraries[name] = require obj
+        LibAdded\Fire name
+      game.ReplicatedStorage.Freya.LiteLibraries.DescendantAdded\connect (obj) ->
+        return unless obj\IsA "ModuleScript"
+        name = {}
+        t = obj
+        while t ~= game.ReplicatedStorage.Freya.LiteLibraries
+          table.insert name, 1, t.Name
+          t = t.Parent
+        name = table.concat name, '/'
+        LiteLibs[name] = require obj
+        LiteAdded\Fire name
       with game.ReplicatedStorage.Freya.Components
-        for v in *.Shared\GetChildren!
+        for k, v in pairs dget .Shared
           spawn ->
-            Components[v.Name] = require v
-            ComponentAdded\Fire v.Name
-        for v in *.Client\GetChildren!
+            Components[k] = require v
+            ComponentAdded\Fire k
+        for k, v in pairs dget .Client
           spawn ->
-            Components[v.Name] = require v
-            ComponentAdded\Fire v.Name
-      for v in *game.ReplicatedStorage.Freya.Libraries\GetChildren!
+            Components[k] = require v
+            ComponentAdded\Fire k
+      for k, v in pairs dget game.ReplicatedStorage.Freya.Libraries
         spawn ->
-          Libraries[v.Name] = require v
-          LibAdded\Fire v.Name
-      for v in *game.ReplicatedStorage.Freya.LiteLibraries\GetChildren!
+          Libraries[k] = require v
+          LibAdded\Fire k
+      for k, v in pairs dget game.ReplicatedStorage.Freya.LiteLibraries
         spawn ->
-          LiteLibs[v.Name] = require v
-          LiteAdded\Fire v.Name
-      game.ReplicatedStorage.Freya.Components.DescendantAdded\connect (obj) ->
-        return unless obj.Parent.Parent == game.ReplicatedStorage.Freya.Components
-        Components[obj.Name] = require obj
-        ComponentAdded\Fire obj.Name
-      game.ReplicatedStorage.Freya.Libraries.ChildAdded\connect (obj) ->
-        Libraries[obj.Name] = require obj
-        LibAdded\Fire obj.Name
-      game.ReplicatedStorage.Freya.LiteLibraries.ChildAdded\connect (obj) ->
-        LiteLibs[obj.Name] = require obj
-        LiteAdded\Fire obj.Name
+          LiteLibs[k] = require v
+          LiteAdded\Fire k
   }
   .GetService = .GetComponent
   .SetService = .SetComponent
