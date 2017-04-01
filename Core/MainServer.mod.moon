@@ -27,19 +27,11 @@ LiteLibs = {}
 BaseLib = require game.ReplicatedStorage.Freya.Core.BaseLib
 LiteLib = require game.ReplicatedStorage.Freya.Core.LiteLib
 
-for v in *game.ReplicatedStorage.Freya.Components.Shared\GetChildren!
-  Components[v.Name] = require v
+Events = require game.ReplicatedStorage.Freya.Components.Shared.Events
 
-for v in *game.ServerStorage.Freya.Components\GetChildren!
-  Components[v.Name] = require v
-  
-for v in *game.ReplicatedStorage.Freya.Libraries\GetChildren!
-  Libraries[v.Name] = require v
-
-for v in *game.ReplicatedStorage.Freya.LiteLibraries\GetChildren!
-  LiteLibs[v.Name] = require v
-
-ComponentAdded = Components.Events.new!
+ComponentAdded = Events.new!
+LibAdded = Events.new!
+LiteAdded = Events.new!
 
 STUB = ->
 
@@ -66,8 +58,12 @@ Controller = with {
         global = true
       return BaseLib not global
     LoadLibrary: Hybrid (LibraryName) ->
-      return error "[Error][Freya] No library named #{LibraryName} installed" unless Libraries[LibraryName]
       lib = Libraries[LibraryName]
+      unless lib
+        warn "[WARN][Freya Server] Yielding for #{LibraryName}"
+        while not lib
+          if LibAdded\wait! == LibraryName
+            lib = Libraries[LibraryName]
       _ENV = getfenv 3
       wrapper = BaseLib!
       if liteLoaded[_ENV]
@@ -98,8 +94,12 @@ Controller = with {
         global = true
       return LiteLib not global
     LoadLiteLibrary: Hybrid (name) ->
-      return error "[Error][Freya] No litelib named #{name} installed" unless LiteLibs[name]
       lib = LiteLibs[name]
+      unless lib
+        warn "[WARN][Freya Server] Yielding for #{name}"
+        while not lib
+          if LiteAdded\wait! == name
+            lib = LiteLibs[name]
       _ENV = getfenv 3
       warn "[WARN][Freya] Stacking LiteLib on BaseLib." if loaded[_ENV]
       return setfenv(lib, _ENV) liteLoaded[_ENV] if liteLoaded[_ENV]
@@ -111,6 +111,26 @@ Controller = with {
       liteLoaded[newENV] = wrapper
       setfenv 3, newENV
       setfenv(lib, newENV) wrapper
+    Init: ->
+      for v in *game.ReplicatedStorage.Freya.Components.Shared\GetChildren!
+        spawn ->
+          Components[v.Name] = require v
+          ComponentAdded\Fire v.Name
+
+      for v in *game.ServerStorage.Freya.Components\GetChildren!
+        spawn ->
+          Components[v.Name] = require v
+          ComponentAdded\Fire v.Name
+
+      for v in *game.ReplicatedStorage.Freya.Libraries\GetChildren!
+        spawn ->
+          Libraries[v.Name] = require v
+          LibAdded\Fire v.Name
+
+      for v in *game.ReplicatedStorage.Freya.LiteLibraries\GetChildren!
+        spawn ->
+          LiteLibs[v.Name] = require v
+          LiteAdded\Fire v.Name
   }
   .GetService = .GetComponent
   .SetService = .SetComponent
