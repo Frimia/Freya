@@ -539,13 +539,13 @@ UISEdge = function(i,p,m)
   elseif sType == 'Touch' then
     sType = 'TouchInput';
     sName = 'Raw';
-  elseif sType == 'MouseButton0' then
-    sType = 'Mouse';
-    sName = 'Mouse1';
   elseif sType == 'MouseButton1' then
     sType = 'Mouse';
-    sName = 'Mouse2';
+    sName = 'Mouse1';
   elseif sType == 'MouseButton2' then
+    sType = 'Mouse';
+    sName = 'Mouse2';
+  elseif sType == 'MouseButton3' then
     sType = 'Mouse';
     sName = 'Mouse3';
   elseif sType == 'MouseMovement' then
