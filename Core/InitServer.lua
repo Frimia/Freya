@@ -19,6 +19,8 @@ local Freya = require(game.ServerStorage.Freya.Main);
 _G.Freya = Freya
 _G.FreyaServer = Freya
 
+Freya.Init();
+
 -- Load everything in ServerScriptService
 -- Respect load orders
 local loadtable = {};
