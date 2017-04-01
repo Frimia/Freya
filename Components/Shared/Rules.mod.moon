@@ -25,7 +25,7 @@
 
 local ^
 now = tick
-local IntentService = require script.Parent.Intents
+IntentService = require script.Parent.Intents
 
 --CaptureState = {}
 TimeState = {}
