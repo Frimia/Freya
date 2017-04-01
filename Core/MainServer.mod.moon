@@ -112,25 +112,43 @@ Controller = with {
       setfenv 3, newENV
       setfenv(lib, newENV) wrapper
     Init: ->
-      for v in *game.ReplicatedStorage.Freya.Components.Shared\GetChildren!
+      dget = =>
+        q = {}
+        r = {}
+        n = @
+        while n
+          for v in *n\GetChildren!
+            q[#q+1] = v
+            if v\IsA "ModuleScript"
+              name = {}
+              t = v
+              while t ~= @
+                table.insert name, 1, t.Name
+                t = t.Parent
+              name = table.concat name, '/'
+              r[name] = v
+          n = q[#q]
+          q[#q] = nil
+        return r
+      for k,v in pairs dget game.ReplicatedStorage.Freya.Components.Shared
         spawn ->
-          Components[v.Name] = require v
-          ComponentAdded\Fire v.Name
+          Components[k] = require v
+          ComponentAdded\Fire k
 
-      for v in *game.ServerStorage.Freya.Components\GetChildren!
+      for k,v in pairs dget game.ServerStorage.Freya.Components
         spawn ->
-          Components[v.Name] = require v
-          ComponentAdded\Fire v.Name
+          Components[k] = require v
+          ComponentAdded\Fire k
 
-      for v in *game.ReplicatedStorage.Freya.Libraries\GetChildren!
+      for k,v in pairs dget game.ReplicatedStorage.Freya.Libraries
         spawn ->
-          Libraries[v.Name] = require v
-          LibAdded\Fire v.Name
+          Libraries[k] = require v
+          LibAdded\Fire k
 
-      for v in *game.ReplicatedStorage.Freya.LiteLibraries\GetChildren!
+      for k,v in pairs dget game.ReplicatedStorage.Freya.LiteLibraries
         spawn ->
-          LiteLibs[v.Name] = require v
-          LiteAdded\Fire v.Name
+          LiteLibs[k] = require v
+          LiteAdded\Fire k
   }
   .GetService = .GetComponent
   .SetService = .SetComponent
