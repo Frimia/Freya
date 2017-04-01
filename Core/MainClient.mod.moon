@@ -5,6 +5,7 @@
 --//
 
 ni = newproxy true
+_didinit = false
 
 Hybrid = (f) -> (...) ->
   return f select 2, ... if ... == ni else f ...
@@ -27,28 +28,10 @@ LiteLibs = {}
 BaseLib = require game.ReplicatedStorage.Freya\WaitForChild("Core")\WaitForChild "BaseLib"
 LiteLib = require game.ReplicatedStorage.Freya.Core\WaitForChild "LiteLib"
 
-with game.ReplicatedStorage.Freya.Components
-  .Shared\WaitForChild "Events"
-  for v in *.Shared\GetChildren!
-    Components[v.Name] = require v
-  for v in *.Client\GetChildren!
-    Components[v.Name] = require v
-for v in *game.ReplicatedStorage.Freya.Libraries\GetChildren!
-  Libraries[v.Name] = require v
-for v in *game.ReplicatedStorage.Freya.LiteLibraries\GetChildren!
-  LiteLibs[v.Name] = require v
-
-
-ComponentAdded = Components.Events.new!
-
-game.ReplicatedStorage.Freya.Components.DescendantAdded\connect (obj) ->
-  return unless obj.Parent.Parent == game.ReplicatedStorage.Freya.Components
-  Components[obj.Name] = require obj
-  ComponentAdded\Fire obj.Name
-game.ReplicatedStorage.Freya.Libraries.ChildAdded\connect (obj) ->
-  Libraries[obj.Name] = require obj
-game.ReplicatedStorage.Freya.LiteLibraries.ChildAdded\connect (obj) ->
-  LiteLibs[obj.Name] = require obj
+Events = require game.ReplicatedStorage.Freya\WaitForChild("Components")\WaitForChild("Shared")\WaitForChild("Events")
+ComponentAdded = Events.new!
+LibAdded = Events.new!
+LiteAdded = Events.new!
   
 STUB = ->
 
@@ -75,8 +58,12 @@ Controller = with {
         global = true
       return BaseLib not global
     LoadLibrary: Hybrid (LibraryName) ->
-      return error "[Error][Freya] No library named #{LibraryName} installed" unless Libraries[LibraryName]
       lib = Libraries[LibraryName]
+      unless lib
+        warn "[WARN][Freya Client] Yielding for #{LibraryName}"
+        while not lib
+          if LibAdded\wait! == LibraryName
+            lib = Libraries[LibraryName]
       _ENV = getfenv 3
       wrapper = BaseLib!
       if liteLoaded[_ENV]
@@ -107,8 +94,12 @@ Controller = with {
         global = true
       return LiteLib not global
     LoadLiteLibrary: Hybrid (name) ->
-      return error "[Error][Freya] No litelib named #{name} installed" unless LiteLibs[name]
       lib = LiteLibs[name]
+      unless lib
+        warn "[WARN][Freya Client] Yielding for #{name}"
+        while not lib
+          if LiteAdded\wait! == name
+            lib = LiteLibs[name]
       _ENV = getfenv 3
       warn "[WARN][Freya] Stacking LiteLib on BaseLib." if loaded[_ENV]
       return setfenv(lib, _ENV) liteLoaded[_ENV] if liteLoaded[_ENV]
@@ -120,6 +111,35 @@ Controller = with {
       liteLoaded[newENV] = wrapper
       setfenv 3, newENV
       setfenv(lib, newENV) wrapper
+    Init: Hybrid (name) ->
+      return if _didinit
+      with game.ReplicatedStorage.Freya.Components
+        for v in *.Shared\GetChildren!
+          spawn ->
+            Components[v.Name] = require v
+            ComponentAdded\Fire v.Name
+        for v in *.Client\GetChildren!
+          spawn ->
+            Components[v.Name] = require v
+            ComponentAdded\Fire v.Name
+      for v in *game.ReplicatedStorage.Freya.Libraries\GetChildren!
+        spawn ->
+          Libraries[v.Name] = require v
+          LibAdded\Fire v.Name
+      for v in *game.ReplicatedStorage.Freya.LiteLibraries\GetChildren!
+        spawn ->
+          LiteLibs[v.Name] = require v
+          LiteAdded\Fire v.Name
+      game.ReplicatedStorage.Freya.Components.DescendantAdded\connect (obj) ->
+        return unless obj.Parent.Parent == game.ReplicatedStorage.Freya.Components
+        Components[obj.Name] = require obj
+        ComponentAdded\Fire obj.Name
+      game.ReplicatedStorage.Freya.Libraries.ChildAdded\connect (obj) ->
+        Libraries[obj.Name] = require obj
+        LibAdded\Fire obj.Name
+      game.ReplicatedStorage.Freya.LiteLibraries.ChildAdded\connect (obj) ->
+        LiteLibs[obj.Name] = require obj
+        LiteAdded\Fire obj.Name
   }
   .GetService = .GetComponent
   .SetService = .SetComponent
