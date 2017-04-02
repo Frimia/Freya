@@ -19,6 +19,24 @@
 
 local ^
 
+Plugin = _G.Freya and _G.Freya.Plugin
+
+b64e = do
+  b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+  (data) ->
+      return ((data\gsub('.', (x) -> 
+          r,b='',x\byte()
+          for i=8,1,-1
+            r=r..(b%2^i-b%2^(i-1)>0 and '1' or '0')
+          return r
+      )..'0000')\gsub('%d%d%d?%d?%d?%d?', (x) ->
+          if (#x < 6) then return ''
+          c=0
+          for i=1,6
+            c=c+(x\sub(i,i)=='1' and 2^(6-i) or 0)
+          return b\sub(c+1,c+1)
+      )..({ '', '==', '=' })[#data%3+1])
+
 Http = game\GetService "HttpService"
 GET =  (url, headers) ->
   local s
@@ -64,6 +82,9 @@ GetPackage = (path, Version) ->
     Accept: "application/vnd.github.v3+json"
     --["User-Agent"]: "CrescentCode/Freya (User #{game.CreatorId})"
   }
+  if _G.Freya then
+    Plugin = _G.Freya.Plugin
+    headers.Authorization = "Basic #{b64e Plugin\GetSetting 'FreyaGitToken'}"
   lGET = GET
   local GET
   GET = (u) -> lGET u, headers
@@ -314,6 +335,9 @@ ReadRepo = (repo) ->
     Accept: "application/vnd.github.v3+json"
     --["User-Agent"]: "CrescentCode/Freya (User #{game.CreatorId})"
   }
+  if _G.Freya then
+    Plugin = _G.Freya.Plugin
+    headers.Authorization = "Basic #{b64e Plugin\GetSetting 'FreyaGitToken'}"
   switch ptype
     when 0, nil
       -- User as repo
