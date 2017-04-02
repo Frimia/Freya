@@ -10,6 +10,7 @@ Hybrid = (f) -> (...) ->
 
 Vulcan = require script.Parent.Util.Vulcan
 RepoManager = require script.Parent.Util.RepoManager
+plugin = PluginManager!
 
 Controller = with {
     InstallPackage: Hybrid (Package, Version) ->
@@ -60,9 +61,10 @@ Controller = with {
       print "[Help][Freya Studio] Removing repositories: `_G.DelRepo(Repository)`"
       print "[Help][Freya Studio] Updating package cache: `_G.UpdateRepo()`"
       print "[Help][Freya Studio] Don't want to use `_G`? Try `_G.Freya.Inject()`"
-    AddRepo: RepoManager.AddRepo
-    DelRepo: RepoManager.DelRepo
-    UpdateRepo: RepoManager.Update
+    AddRepo: Hybrid RepoManager.AddRepo
+    DelRepo: Hybrid RepoManager.DelRepo
+    UpdateRepo: Hybrid RepoManager.Update
+    Plugin: plugin
     Inject: ->
       nenv = {
         Freya: Controller
