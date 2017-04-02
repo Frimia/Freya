@@ -5,7 +5,7 @@ local Controller = {};
 local this = newproxy(true);
 local IntentService = require(game.ReplicatedStorage.Freya.Components.Shared.Intents);
 local Event = require(game.ReplicatedStorage.Freya.Components.Shared.Events);
--- local Translation = _G.Valkyrie:GetComponent "Translation";
+-- local Translation = _G.Freya:GetComponent "Translation";
 local RenderStep = game:GetService('RunService').RenderStepped;
 
 local function extract(...) -- Dynamic methods are pretty much standard now
@@ -752,18 +752,18 @@ do
       return newConnection;
     end;
   end;
-  -- @source: Valkyrie Input type
+  -- @source: Freya Input type
   -- @dir: Input direction (Up, Down, /Click)
   function ActionClass:BindControl(source, dir)
     -- ~ UIS/Mouse style input sources to bind from
-    assert(source, "[Error][Valkyrie Input] (in ActionClass:BindControl()): You need to supply an Input source as #1", 2);
+    assert(source, "[Error][Freya Input] (in ActionClass:BindControl()): You need to supply an Input source as #1", 2);
     local Type, Name = LinkedTypes[source],LinkedNames[source];
     assert(
       Type and Name,
-      "[Error][Valkyrie Input] (in ActionClass:BindControl()): You need to supply a valid Valkyrie Input as #1, did you supply a string by accident?",
+      "[Error][Freya Input] (in ActionClass:BindControl()): You need to supply a valid Freya Input as #1, did you supply a string by accident?",
       2
     );
-    assert(dir, "[Error][Valkyrie Input] (in ActionClass:BindControl()): You need to supply an Input direction as #2", 2);
+    assert(dir, "[Error][Freya Input] (in ActionClass:BindControl()): You need to supply an Input direction as #2", 2);
     do local suc = false;
       for k,v in next, InputDirections do
         if v == dir then
@@ -772,7 +772,7 @@ do
         end;
       end;
       if not suc then
-        error("[Error][Valkyrie Input] (in ActionClass:BindControl()): You need to supply a valid Valkyrie Input direction object as #2", 2);
+        error("[Error][Freya Input] (in ActionClass:BindControl()): You need to supply a valid Freya Input direction object as #2", 2);
       end;
     end;
 
