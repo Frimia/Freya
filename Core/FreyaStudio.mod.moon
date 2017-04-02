@@ -10,7 +10,7 @@ Hybrid = (f) -> (...) ->
 
 Vulcan = require script.Parent.Util.Vulcan
 RepoManager = require script.Parent.Util.RepoManager
-plugin = PluginManager!
+plugin = PluginManager!\CreatePlugin!
 
 Controller = with {
     InstallPackage: Hybrid (Package, Version) ->
