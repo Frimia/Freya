@@ -84,7 +84,9 @@ GetPackage = (path, Version) ->
   }
   if _G.Freya then
     Plugin = _G.Freya.Plugin
-    headers.Authorization = "Basic #{b64e Plugin\GetSetting 'FreyaGitToken'}"
+    a = Plugin\GetSetting 'FreyaGitToken'
+    if a
+      headers.Authorization = "Basic #{b64e a}"
   lGET = GET
   local GET
   GET = (u) -> lGET u, headers
@@ -337,7 +339,9 @@ ReadRepo = (repo) ->
   }
   if _G.Freya then
     Plugin = _G.Freya.Plugin
-    headers.Authorization = "Basic #{b64e Plugin\GetSetting 'FreyaGitToken'}"
+    a = Plugin\GetSetting 'FreyaGitToken'
+    if a
+      headers.Authorization = "Basic #{b64e a}"
   switch ptype
     when 0, nil
       -- User as repo
