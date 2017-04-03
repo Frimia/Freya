@@ -71,10 +71,10 @@ Controller = with {
       if loaded[_ENV]
         setfenv(lib, _ENV) loaded[_ENV]
       else
-        wrapper.wlist.ref[cxitio.LoadLibrary] = cxitio.LoadLibrary
+        wrapper.wlist.ref[Controller.LoadLibrary] = Controller.LoadLibrary
         newEnv = setmetatable {}, {
           __index: (_,k) ->
-            v = Wrapper.Overrides.Globals[k] or _ENV[k]
+            v = wrapper.Overrides.Globals[k] or _ENV[k]
             return v if v
             s,v = pcall(game.GetService,game,k)
             return v if s
