@@ -55,7 +55,7 @@ Clear = (Location, Name) ->
   SPSFreya = with Instance.new "Folder"
     .Name = "Freya"
     .Parent = game.StarterPlayer.StarterPlayerScripts
-  with game.StarterPlayer\FindFirstChild("FreyaUserscripts") or  Instance.new "Folder"
+  with game.StarterPlayer.StarterPlayerScripts\FindFirstChild("FreyaUserscripts") or  Instance.new "Folder"
     .Name = "FreyaUserscripts"
     .Parent = game.StarterPlayer.StarterPlayerScripts
   print "[Freya] Unpacking StarterPlayerScripts:"
