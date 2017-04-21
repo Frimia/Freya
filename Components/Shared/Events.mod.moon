@@ -47,11 +47,11 @@ eClass = {
         return unpack ret, 1, ret.n
     Events[@]\Fire!
   connect: (f) =>
-    Events[@].Event\connect ->
+    Events[@].Event\Connect ->
       ar = Hold[@]
       f unpack ar, 1, ar.n
   wait: =>
-    Events[@].Event\wait!
+    Events[@].Event\Wait!
     ar = Hold[@]
     unpack ar, 1, ar.n
   intercept: (f) =>
@@ -65,6 +65,7 @@ eClass = {
 }
 eClass.Connect = eClass.connect
 eClass.Fire = eClass.fire
+eClass.Wait = eClass.wait
 eClass.Intercept = eClass.intercept
 eClass.Handle = eClass.handle
 
