@@ -1,4 +1,4 @@
-# Freya
+# [Freya](https://docs.crescentcode.net/Freya)
 
 Freya is a framework and template for developing with Roblox. Everything which Freya provides is designed to aid and accelerate the development of features on Roblox, alongside enabling other third-party developers to use the Freya infrastructure to provide inherent integration and compatibility with existing code and other Freya-ready models.
 
@@ -8,8 +8,8 @@ Freya is a framework and template for developing with Roblox. Everything which F
 - [All-to-all networkable signals](https://docs.crescentcode.net/Freya/Components/Intents)
 - [Powerful permissions](https://docs.crescentcode.net/Freya/Components/Permissions)
 - [Stateful Input](https://docs.crescentcode.net/Freya/Components/Input)
-- [Game rules](https://github.com/CrescentCode/Freya/blob/master/Components/Shared/Rules.mod.moon)
-- [Valkyrie](https://docs.crescentcode.net/Valkyrie) support
+- [Game rules](https://docs.crescentcode.net/Freya/Components/Rules)
+- [Observers](https://docs.crescentcode.net/Freya/Components/Arbiters)
 - [Package management](https://docs.crescentcode.net/Freya/Core/Vulcan)
 - Magical seamless wrappers ([BaseLib](https://docs.crescentcode.net/Freya/Libraries) and [LiteLib](https://docs.crescentcode.net/Freya/LiteLibraries))
 - [Official](https://github.com/CrescentCode/FreyaPackages) and user packages (eg [FreyaBits](https://github.com/eLunate/FreyaBits/))
@@ -53,8 +53,9 @@ You would probably benefit from using Freya if you are:
   If you are using something else which has Freya compatibility, you may benefit from the additional integration it provides to your game. If you are using multiple Freya-compatible models, you may find that adding Freya also allows them to integrate with eachother and interface easily, allowing them to support eachother as if they were designed to be used together.
 - **Using something which relies on Freya**<br>
   Some models may have Freya as a dependency, and will simply refuse to work without Freya. This may be because they were built around Freya, because they are designed as compatibility layers, or because they were designed as extensions to Freya. Whatever the reason is, you will need Freya in your game for them to work.
-  
+
 ## Where is the documentation?
+
 The documentation can be found [here](https://docs.crescentcode.net/Freya), and provides examples and standards. If anything is missing, feel free to [contribute](https://github.com/CrescentCode/Enchiridion/tree/master/site/Freya) or [suggest some changes](https://github.com/CrescentCode/Enchiridion/issues)
 
 ## What's in a name?
