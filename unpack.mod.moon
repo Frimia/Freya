@@ -159,4 +159,5 @@ Clear = (Location, Name) ->
     .Parent = RSFreya
   @Version.Parent = SSFreya
   @vanish.Parent = SSFreya
+  @VersionManifest.Parent = SSFreya
   print "[Freya] Finished unpacking Freya"
