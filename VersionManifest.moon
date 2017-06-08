@@ -1,4 +1,4 @@
 {
-  id: 480740831
-  desc: "Master branch of Freya. Unstable, able to change any time."
+  id: 848062710
+  desc: "First release branch of Freya. Stable updates only."
 }
