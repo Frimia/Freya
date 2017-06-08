@@ -19,10 +19,9 @@ Controller = with {
       return error "[Error][Freya Studio] Unable to install package - '#{err}'" unless s
       print "[Info][Freya Studio] Successfully installed #{Package}"
     Update: ->
-      -- Update Freya
-      -- Come back later when you can determine whether Freya is beta/bleeding/etc
-      -- Or if you decide not to use that model for Freya
-      return require(480740831)
+      -- Update Freya by reading the update source from the contained
+      -- version manifest.
+      return require(require(game.ServerStorage.Freya.VersionManifest).id)
     UpdatePackage: Hybrid (Package, Version) ->
       -- Update a package.
       s, err = pcall Vulcan.UpdatePackage, Package, Version
