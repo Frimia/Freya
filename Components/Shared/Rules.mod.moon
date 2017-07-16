@@ -31,6 +31,7 @@ IntentService = require script.Parent.Intents
 TimeState = {}
 DenyState = {}
 ContestState = {}
+IntentState = {}
 
 Try = (...) =>
   -- self = rule
