@@ -21,7 +21,7 @@ Intent\Intercept (name, ...) -> IIntercept[name] and IIntercept[name] ...
 
 IsClient = do
   RunService = game\GetService "RunService"
-  if RunService\IsRunMode!
+  if RunService\IsClient! and RunService\IsServer!
     warn "Intents running in Studio Run mode. Behaviour can not be trusted."
   RunService\IsClient!
 
