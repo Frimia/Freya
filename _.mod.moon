@@ -10,8 +10,10 @@ local FreyaStudio, IsStudio, HttpEnabled, FreyaStudio
 
 HttpService = with game\GetService "HttpService"
   IsStudio = pcall -> HttpEnabled = .HttpEnabled
-  return error "The Freya MainModule must be required from the Studio command bar" unless IsStudio
-  .HttpEnabled = true
+  if IsStudio
+    .HttpEnabled = true
+  else
+    warn "Freya is not being installed from the command bar. HttpEnabled must be ticked!"
 JSONDecode = HttpService\JSONDecode
 
 if not script\FindFirstChild "Version"

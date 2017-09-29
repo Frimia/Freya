@@ -25,7 +25,7 @@ end
 
 -- Connect for anything getting added, just in case.
 local w = false;
-game.ReplicatedFirst.FreyaUserscripts.ChildAdded:connect(function(c)
+game.ReplicatedFirst.FreyaUserscripts.ChildAdded:connect(function(v)
   if v:IsA("LocalScript") and v:WaitForChild("Enabled").Value then
     w = true
     if v:FindFirstChild("LoadOrder") and v.LoadOrder.Value == -1 then
@@ -33,7 +33,7 @@ game.ReplicatedFirst.FreyaUserscripts.ChildAdded:connect(function(c)
     end
   end
 end)
-script.Parent.ChildAdded:connect(function(c)
+script.Parent.ChildAdded:connect(function(v)
   if v:IsA("LocalScript") and v:WaitForChild("Enabled").Value then
     w = true
     if v:FindFirstChild("LoadOrder") and v.LoadOrder.Value == -1 then
