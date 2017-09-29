@@ -87,7 +87,4 @@ else
 FreyaStudio = require FreyaStudio
 FreyaStudio.UpdateRepo!
 
--- Set the HttpService state back to the original
-HttpService.HttpEnabled = HttpEnabled
-
 return FreyaStudio
