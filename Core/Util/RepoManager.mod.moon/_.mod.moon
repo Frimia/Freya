@@ -18,9 +18,8 @@ Togglet = (f) ->
     f!
     HttpService.HttpEnabled = e
   elseif not hwarned
-    warn "
-    [Warn][Freya RepoManager] Plugins may not read the HttpEnabled state.
-    Ensure that HttpEnabled is ticked to allow RepoManager to function properly"
+    warn "[Warn][Freya RepoManager] Plugins may not read the HttpEnabled state.
+Ensure that HttpEnabled is ticked to allow RepoManager to function properly."
 RepoList = HttpService\JSONDecode require script.RepoList
 RepoList or= {
   Repositories: {}
