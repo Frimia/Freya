@@ -9,15 +9,18 @@
 GitFetch = require script.Parent.GitFetch
 
 HttpService = game\GetService "HttpService"
+hwarned = false
 Togglet = (f) ->
-  olden = HttpService.HttpEnabled
-  pcall ->
-    HttpService.HttpEnabled = true
-  if HttpService.HttpEnabled
+  s,e = pcall -> HttpService.HttpEnabled
+  if s
+    unless e
+      HttpService.HttpEnabled = true
     f!
-    pcall -> HttpService.HttpEnabled = olden
-  else
-    error "[Error][Freya RepoManager] HTTP requests are disabled."
+    HttpService.HttpEnabled = e
+  elseif not hwarned
+    warn "
+    [Warn][Freya RepoManager] Plugins may not read the HttpEnabled state.
+    Ensure that HttpEnabled is ticked to allow RepoManager to function properly"
 RepoList = HttpService\JSONDecode require script.RepoList
 RepoList or= {
   Repositories: {}
