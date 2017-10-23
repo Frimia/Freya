@@ -17,7 +17,7 @@ Hold = setmetatable {}, __mode: 'k'
 
 local foldd
 foldd = (t, i, c, ...) ->
-  if i == #t
+  if i >= #t
     t[i] c, ...
   else
     foldd t, i+1, c, t[i] c, ...
