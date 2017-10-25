@@ -86,6 +86,7 @@ CreateEvent = ->
     .__index = EventClass
     .__metatable = "Locked Metatable: Freya Core"
     .__tostring = -> "Freya Event"
+    .__call = EventClass.Fire
   Events[ne] = Instance.new "BindableEvent"
   ne
 
