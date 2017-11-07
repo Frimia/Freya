@@ -44,7 +44,8 @@ dget = =>
     n = q[#q]
     q[#q] = nil
   return r
-do @ = game.ReplicatedStorage.Freya.Components.Shared
+do
+  @ = game.ReplicatedStorage.Freya.Components.Shared
   @DescendantAdded\Connect (obj) ->
     return unless obj\IsA "ModuleScript"
     name = {}
@@ -63,7 +64,8 @@ do @ = game.ReplicatedStorage.Freya.Components.Shared
       Components['Shared::'..name] = require v
       ComponentAdded\Fire k
       ComponentAdded\Fire 'Shared::'..name
-do @ = game.ServerStorage.Freya.Components.Server
+do
+  @ = game.ServerStorage.Freya.Components.Server
   @DescendantAdded\Connect (obj) ->
     return unless obj\IsA "ModuleScript"
     name = {}
