@@ -21,7 +21,7 @@ Listen = (f) =>
 Wait = (f) =>
   emitterE\Wait!
   t = Hold[@]
-  f unpack t, 2, t[1],
+  f unpack t, 2, t[1]
 
 ni = newproxy true
 with getmetatable ni
