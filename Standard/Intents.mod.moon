@@ -182,10 +182,10 @@ if IsClient
     InitIntent @Name
     ie = InEvents[@Name]
     @OnClientEvent\Connect ie\Fire
-  for @ in *RemoteCollection\GetChildren!
-    InitIntent @Name
-    ie = InEvents[@Name]
-    @OnClientEvent\Connect ie\Fire
+  for v in *RemoteCollection\GetChildren!
+    InitIntent v.Name
+    ie = InEvents[v.Name]
+    v.OnClientEvent\Connect ie\Fire
 else
   RemoteCollection.ChildAdded\Connect =>
     r = @
