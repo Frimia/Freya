@@ -18,7 +18,7 @@ SPS = game.StarterPlayer.StarterPlayerScripts
 
   print "[Freya Uninstaller] Uninstalling packages:"
   Vulcan = require SS.Freya.Components.Studio.Vulcan
-  for *v in Vulcan.Packages
+  for v in *Vulcan.Packages
     print "[Freya Uninstaller] * #{v.name}"
     Vulcan.Uninstall v.source
 
