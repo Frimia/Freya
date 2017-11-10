@@ -8,6 +8,11 @@
 --// | implementation of the standard Freya patterns
 --//
 
+-- Consider adding a type called a Seeker; It will work by going through all
+-- connected functions (in order) and returning the results of the first
+-- function to take a bite. For a function to take a bite, it must return `true`
+-- followed by its actual returns.
+
 Intents = _G.Freya\GetComponent "Intents"
 Events = _G.Freya\GetComponent "Events"
 
