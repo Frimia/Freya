@@ -85,6 +85,9 @@ with game.ReplicatedStorage.Freya.Components
       Components['Client::'..k] = require v
       ComponentAdded\Fire 'Client::'..k
 
+_G.Freya = ni
+_G.FreyaClient = ni
+
 with getmetatable ni
   .__index = cxitio
   .__tostring = -> "Freya Main: Client"

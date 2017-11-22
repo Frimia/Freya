@@ -89,6 +89,9 @@ do
       Components['Server::'..k] = require v
       ComponentAdded\Fire 'Server::'..k
 
+_G.Freya = ni
+_G.FreyaServer = ni
+
 with getmetatable ni
   .__index = cxitio
   .__tostring = -> "Freya Main: Server"

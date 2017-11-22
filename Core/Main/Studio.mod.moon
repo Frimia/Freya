@@ -129,12 +129,15 @@ do
       Components["Studio::"..k] = require v
       ComponentAdded\Fire "Studio::"..k
 
-Vulcan = cxitio.GetComponent "Studio::Vulcan"
-RepoManager = cxitio.GetComponent "Studio::Vulcan/RepoManager"
-
 with getmetatable ni
   .__index = cxitio
   .__tostring = -> "Freya Main: Studio"
   .__metatable = "Locked Metatable: Freya Core"
+
+_G.Freya = ni
+_G.FreyaStudio = ni
+
+Vulcan = cxitio.GetComponent "Studio::Vulcan"
+RepoManager = cxitio.GetComponent "Studio::Vulcan/RepoManager"
 
 ni
