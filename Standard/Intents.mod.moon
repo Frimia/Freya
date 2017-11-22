@@ -26,10 +26,11 @@ InEvents = {}
 AllowReflection = {}
 RemoteCollection = game.ReplicatedFirst\WaitForChild "FreyaIntentCollection"
 
-IsClient = with game\GetService "RunService"
+local IsClient
+with game\GetService "RunService"
   if \IsClient! and \IsServer!
     warn "Intents are running in Studio test mode; behaviour can not be trusted"
-  \IsClient!
+  IsClient = \IsClient!
 
 ThisSource = IsClient and game.Players.LocalPlayer or nil
 GetPlayers = game.Players\GetPlayers
