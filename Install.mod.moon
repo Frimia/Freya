@@ -124,4 +124,10 @@ SPS = SP.StarterPlayerScripts
     .Name = "FreyaLoader"
     .Parent = SSS
 
+  print "[Freya Installer] Preparing Intents"
+
+  with Instance.new "Folder"
+    .Name = "FreyaIntentCollection"
+    .Parent = RS
+
   print "[Freya Installer] Finished installing Freya"
