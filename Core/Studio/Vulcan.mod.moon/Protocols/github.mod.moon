@@ -201,11 +201,12 @@ ReadRepo = =>
   else
     -- User as repo
     _, rlist = GET "#{ghroot}users/#{p1}/repos"
-    s, data = pcall GET, "#{ghraw}#{r.full_name}/master/VulcanPackage.toml"
-    continue unless s and data
-    s, data = pcall TOML.parse, data
-    continue unless s and data
-    paklist[r.name] = "github:#{r.full_name}"
+    for r in *rlist
+      s, data = pcall GET, "#{ghraw}#{r.full_name}/master/VulcanPackage.toml"
+      continue unless s and data
+      s, data = pcall TOML.parse, data
+      continue unless s and data
+      paklist[r.name] = "github:#{r.full_name}"
   paklist
 
 return {

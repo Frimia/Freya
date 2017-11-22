@@ -39,6 +39,7 @@ Safely = (f) -> (...) ->
         error r[2], 2
 
 {:JSONEncode, :JSONDecode} = game\GetService "HttpService"
+RepoManager = _G.Freya\GetComponent "Studio::Vulcan/RepoManager"
 
 Packages = {}
 Dependants = {}
@@ -62,6 +63,33 @@ GetPackage = Safely Hybrid =>
   _, _, protocol, body = @find "^([^:]):(.+)"
   unless protocol and body
     -- Assume repo name
+    _, _, pname, disamb = @find "^([^#]+)#?(.*)"
+    disamb = tonumber disamb
+    pak = RepoManager.ResolveAlias pname
+    switch type pak
+      when 'string'
+        -- Single package!
+        protocol, body = pak\find "^([^:]):(.+)"
+      when 'table'
+        warn "[Freya Vulcan] Multiple packages exist as `#{pname}`"
+        if disamb
+          pak = pak[disamb]
+          unless pak return error
+            why: "[Freya Vulcan] No package at position `#{disamb}` from `#{@}`"
+            to: 3
+          warn "[Freya Vulcan] Selecting `#{pak}` for #{@}"
+        else
+          warn "[Freya Vulcan] No position selected;"
+          for i=1, #pak
+            v = pak[i]
+            warn "[Freya Vulcan] * `#{i}`: #{v}"
+          pak = pak[1]
+          warn "[Freya Vulcan] Selecting `#{pak}` as a default."
+        protocol, body = pak\find "^([^:]):(.+)"
+      when 'nil'
+        error
+          why: "[Freya Vulcan] No package exists as `#{@}`"
+          to: 3
   unless Protocols\FindFirstChild protocol
     error
       why: "[Freya Vulcan] No handler for the `#{protocol}` protocol exists"
