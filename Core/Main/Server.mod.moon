@@ -61,9 +61,9 @@ do
   for k, v in pairs dget @
     spawn ->
       Components[k] = require v
-      Components['Shared::'..name] = require v
+      Components['Shared::'..k] = require v
       ComponentAdded\Fire k
-      ComponentAdded\Fire 'Shared::'..name
+      ComponentAdded\Fire 'Shared::'..k
 do
   @ = game.ServerStorage.Freya.Components.Server
   @DescendantAdded\Connect (obj) ->
