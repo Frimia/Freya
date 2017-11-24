@@ -88,7 +88,7 @@ do
   for k, v in pairs dget @
     defer ->
       if Components[k]
-        warn "[Freya Server] Component Server::#{name} overrides Shared::#{name}"
+        warn "[Freya Server] Component Server::#{k} overrides Shared::#{k}"
       Components[k] = require v
       ComponentAdded\Fire k
       Components['Server::'..k] = require v

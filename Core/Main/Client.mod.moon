@@ -84,7 +84,7 @@ with game.ReplicatedStorage.Freya.Components
   for k, v in pairs dget .Client
     defer ->
       if Components[k]
-        warn "[Freya Client] Component Client::#{name} overrides Shared::#{name}"
+        warn "[Freya Client] Component Client::#{k} overrides Shared::#{k}"
       Components[k] = require v
       ComponentAdded\Fire k
       Components['Client::'..k] = require v
