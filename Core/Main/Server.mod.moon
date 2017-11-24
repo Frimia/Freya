@@ -6,7 +6,7 @@
 ni = newproxy true
 Hybrid = (f) -> (...) -> return f ... if ... ~= ni else f select 2, ...
 
-Events =  require game.ReplicatedStorage.Freya.Components.Shared.Events
+Events = require game.ReplicatedStorage.Freya.Components.Shared.Events
 ComponentAdded = Events.new!
 
 Components = {}
