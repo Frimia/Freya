@@ -43,6 +43,11 @@ dget = =>
     n = q[#q]
     q[#q] = nil
   return r
+
+dlist = {}
+defer = =>
+  table.insert dlist, @
+
 with game.ReplicatedStorage.Freya.Components
   .Shared.DescendantAdded\Connect (obj) ->
     return unless obj\IsA "ModuleScript"
@@ -71,13 +76,13 @@ with game.ReplicatedStorage.Freya.Components
     Components['Client::'..name] = require obj
     ComponentAdded\Fire 'Client::'..name
   for k, v in pairs dget .Shared
-    spawn ->
+    defer ->
       Components[k] = require v
       ComponentAdded\Fire k
       Components['Shared::'..k] = require v
       ComponentAdded\Fire 'Shared::'..k
   for k, v in pairs dget .Client
-    spawn ->
+    defer ->
       if Components[k]
         warn "[Freya Client] Component Client::#{name} overrides Shared::#{name}"
       Components[k] = require v
@@ -92,5 +97,8 @@ with getmetatable ni
   .__index = cxitio
   .__tostring = -> "Freya Main: Client"
   .__metatable = "Locked Metatable: Freya Core"
+
+for v in *dlist
+  spawn v
 
 ni

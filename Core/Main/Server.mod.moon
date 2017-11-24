@@ -44,6 +44,11 @@ dget = =>
     n = q[#q]
     q[#q] = nil
   return r
+
+dlist = {}
+defer = =>
+  table.insert dlist, @
+
 do
   @ = game.ReplicatedStorage.Freya.Components.Shared
   @DescendantAdded\Connect (obj) ->
@@ -59,7 +64,7 @@ do
     ComponentAdded\Fire name
     ComponentAdded\Fire 'Shared::'..name
   for k, v in pairs dget @
-    spawn ->
+    defer ->
       Components[k] = require v
       Components['Shared::'..k] = require v
       ComponentAdded\Fire k
@@ -81,7 +86,7 @@ do
     Components['Server::'..name] = require obj
     ComponentAdded\Fire 'Server::'..name
   for k, v in pairs dget @
-    spawn ->
+    defer ->
       if Components[k]
         warn "[Freya Server] Component Server::#{name} overrides Shared::#{name}"
       Components[k] = require v
@@ -96,5 +101,8 @@ with getmetatable ni
   .__index = cxitio
   .__tostring = -> "Freya Main: Server"
   .__metatable = "Locked Metatable: Freya Core"
+
+for v in *dlist
+  spawn v
 
 ni

@@ -48,6 +48,11 @@ dget = =>
     n = q[#q]
     q[#q] = nil
   return r
+
+dlist = {}
+defer = =>
+  table.insert dlist, @
+
 do
   @ = game.ReplicatedStorage.Freya.Components.Shared
   @DescendantAdded\Connect (obj) ->
@@ -63,7 +68,7 @@ do
     Components["Shared::"..name] = require obj
     ComponentAdded\Fire "Shared::"..name
   for k, v in pairs dget @
-    spawn ->
+    defer ->
       Components[k] = require v
       ComponentAdded\Fire k
       Components["Shared::"..k] = require v
@@ -83,7 +88,7 @@ do
     Components["Server::"..name] = require obj
     ComponentAdded\Fire "Server::"..name
   for k, v in pairs dget @
-    spawn ->
+    defer ->
       Components[k] = require v
       ComponentAdded\Fire k
       Components["Server::"..k] = require v
@@ -103,7 +108,7 @@ do
     Components["Client::"..name] = require obj
     ComponentAdded\Fire "Client::"..name
   for k, v in pairs dget @
-    spawn ->
+    defer ->
       Components[k] = require v
       ComponentAdded\Fire k
       Components["Client::"..k] = require v
@@ -123,7 +128,7 @@ do
     Components["Studio::"..name] = require obj
     ComponentAdded\Fire "Studio::"..name
   for k, v in pairs dget @
-    spawn ->
+    defer ->
       Components[k] = require v
       ComponentAdded\Fire k
       Components["Studio::"..k] = require v
@@ -136,6 +141,9 @@ with getmetatable ni
 
 _G.Freya = ni
 _G.FreyaStudio = ni
+
+for v in *dlist
+  spawn v
 
 Vulcan = cxitio.GetComponent "Studio::Vulcan"
 RepoManager = cxitio.GetComponent "Studio::Vulcan/RepoManager"
