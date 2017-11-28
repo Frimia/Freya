@@ -128,6 +128,6 @@ SPS = SP.StarterPlayerScripts
 
   with Instance.new "Folder"
     .Name = "FreyaIntentCollection"
-    .Parent = RS
+    .Parent = RF
 
   print "[Freya Installer] Finished installing Freya"

@@ -21,9 +21,9 @@ _G.FreyaClient = Freya
 
 -- Sort the loadme
 table.sort loadme, (a,b) ->
-  loada = a:FindFirstChild("LoadOrder")
+  loada = a\FindFirstChild("LoadOrder")
   loada = loada and loada.Value or 1
-  loadb = b:FindFirstChild("LoadOrder")
+  loadb = b\FindFirstChild("LoadOrder")
   loadb = loadb and loadb.Value or 1
   return loada < loadb
 
@@ -41,9 +41,9 @@ for v in *PSF.User\GetChildren!
     loadme[#loadme+1] = v
 
 table.sort loadme, (a,b) ->
-  loada = a:FindFirstChild("LoadOrder")
+  loada = a\FindFirstChild("LoadOrder")
   loada = loada and loada.Value or 1000
-  loadb = b:FindFirstChild("LoadOrder")
+  loadb = b\FindFirstChild("LoadOrder")
   loadb = loadb and loadb.Value or 1000
   return loada < loadb
 

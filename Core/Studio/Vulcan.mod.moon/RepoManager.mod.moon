@@ -78,3 +78,10 @@ cxitio = {
   :Update
   :Flush
 }
+
+with getmetatable ni
+  .__index = cxitio
+  .__tostring = -> "FreyaStudio RepoManager"
+  .__metatable = "Locked Metatable: Freya Studio"
+
+ni
